@@ -239,6 +239,7 @@ public class SAMP extends com.raiferoleplay.game.game.SAMP implements CustomKeyb
 
     ConstraintLayout hud_main;
     ConstraintLayout loadingscreen;
+    WebView loadingWebView;
 
     private int iShowHud;
     private boolean iShowLogo;
@@ -509,6 +510,13 @@ public class SAMP extends com.raiferoleplay.game.game.SAMP implements CustomKeyb
 
         loadingscreen = (ConstraintLayout) getLayoutInflater().inflate(R.layout.loading_screen, null);
         addContentView(loadingscreen, new ConstraintLayout.LayoutParams(-1, -1));
+        loadingWebView = loadingscreen.findViewById(R.id.loading_webview);
+        if (loadingWebView != null) {
+            loadingWebView.getSettings().setJavaScriptEnabled(true);
+            loadingWebView.getSettings().setAllowFileAccessFromFileURLs(true);
+            loadingWebView.setBackgroundColor(0xFF0A0A0F);
+            loadingWebView.loadUrl("file:///android_asset/launcher/loading.html");
+        }
         loadingscreen.setVisibility(View.GONE);
 
         mKeyboard = new CustomKeyboard(this);
