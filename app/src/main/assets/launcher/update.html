@@ -4,288 +4,430 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
   <title>Gotham City — Atualizando</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet"/>
   <style>
-    *{box-sizing:border-box;margin:0;padding:0}
-    :root{
-      --accent:#8fb430;
-      --accent-dim:rgba(143,180,48,.15);
-      --bg:#0d0d14;
-      --text:#e8e8f0;
-      --text-sec:rgba(232,232,240,.6);
-      --text-muted:rgba(232,232,240,.35);
-      --surface:rgba(255,255,255,.03);
-      --border:rgba(255,255,255,.07);
-    }
-    html,body{
-      width:100%;height:100%;overflow:hidden;
-      background:var(--bg);
-      font-family:'Inter',sans-serif;
-      -webkit-user-select:none;user-select:none;
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --accent:        #8fb430;
+      --accent-dim:    rgba(143,180,48,.12);
+      --accent-border: rgba(143,180,48,.28);
+      --accent-glow:   rgba(143,180,48,.45);
+      --border:        rgba(255,255,255,.08);
+      --text:          #f0f0f0;
+      --text-sec:      #9a9aaa;
+      --text-muted:    #55556a;
+      --surface:       rgba(255,255,255,.05);
     }
 
-    /* ── Background banner ── */
-    .bg-layer{
-      position:fixed;inset:0;
-      background:url('assets/update_banner.jpg') center center/cover no-repeat;
-      z-index:0;
-    }
-    .bg-overlay{
-      position:fixed;inset:0;
-      background:linear-gradient(to top,#0d0d14 0%,#0d0d14 30%,rgba(13,13,20,.92) 55%,rgba(13,13,20,.6) 100%);
-      z-index:1;
+    html, body {
+      width: 100%; height: 100%; overflow: hidden;
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: #050505;
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+      -webkit-user-select: none; user-select: none;
     }
 
-    /* ── Content wrapper ── */
-    .content{
-      position:relative;z-index:2;
-      width:100%;height:100%;
-      display:flex;align-items:center;justify-content:center;
+    /* ── Background ── */
+    .bg-img {
+      position: fixed; inset: 0; z-index: 0;
+      background: url('assets/batman_bg.png') center center / cover no-repeat;
+    }
+    /* heavy vignette — left side dark so text is readable */
+    .bg-fade {
+      position: fixed; inset: 0; z-index: 1;
+      background:
+        linear-gradient(105deg,
+          rgba(5,5,5,.97) 0%,
+          rgba(5,5,5,.82) 38%,
+          rgba(5,5,5,.30) 62%,
+          rgba(5,5,5,.60) 100%),
+        linear-gradient(to bottom,
+          rgba(5,5,5,.50) 0%,
+          rgba(5,5,5,.90) 100%);
     }
 
-    /* ── Panel shared ── */
-    .panel{
-      width:min(560px,90vw);
-      background:rgba(13,13,20,.85);
-      border:1px solid var(--border);
-      border-radius:16px;
-      padding:28px 28px 24px;
-      backdrop-filter:blur(20px);
-      -webkit-backdrop-filter:blur(20px);
-      box-shadow:0 24px 64px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.04);
-      animation:panelIn .35s cubic-bezier(.2,.8,.2,1) both;
-    }
-    @keyframes panelIn{
-      from{opacity:0;transform:translateY(18px) scale(.97)}
-      to  {opacity:1;transform:translateY(0)    scale(1)}
-    }
-    .hidden{display:none!important}
-
-    /* ── Logo row ── */
-    .logo-row{
-      display:flex;align-items:center;gap:14px;margin-bottom:22px;
-    }
-    .logo-img{
-      width:44px;height:44px;border-radius:10px;
-      border:1px solid rgba(143,180,48,.3);
-      background:rgba(143,180,48,.08);
-      object-fit:contain;padding:4px;
-      flex-shrink:0;
-    }
-    .logo-text{}
-    .logo-badge{
-      display:inline-block;
-      background:rgba(143,180,48,.15);
-      border:1px solid rgba(143,180,48,.3);
-      color:var(--accent);
-      font-size:9px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;
-      padding:3px 9px;border-radius:20px;margin-bottom:4px;
-    }
-    .logo-title{
-      font-size:18px;font-weight:900;color:#fff;letter-spacing:-.3px;line-height:1;
+    @keyframes blink {
+      0%,100% { opacity: 1; } 50% { opacity: .35; }
     }
 
-    /* ── Status text ── */
-    .status-text{
-      font-size:13px;font-weight:500;color:var(--text-sec);
-      margin-bottom:18px;line-height:1.4;
+    /* ── Page layout — left-aligned, vertically centered ── */
+    .page {
+      position: fixed; inset: 0; z-index: 10;
+      display: flex; align-items: center;
+      padding: 0;
+    }
+    .content {
+      padding: 0 32px;
+      max-width: 420px;
+      width: 100%;
+      display: flex; flex-direction: column; gap: 0;
     }
 
-    /* ── File info row ── */
-    .file-info-row{
-      display:flex;align-items:center;justify-content:space-between;
-      margin-bottom:10px;
+    /* ── Panels ── */
+    .panel { display: flex; flex-direction: column; gap: 22px; }
+    .hidden { display: none !important; }
+
+    /* Logo row */
+    .logo-row { display: flex; align-items: center; gap: 14px; }
+    .logo-img {
+      width: 42px; height: 42px; flex-shrink: 0;
+      border-radius: 10px;
+      border: 1px solid var(--accent-border);
+      background: var(--accent-dim);
+      object-fit: contain; padding: 6px;
     }
-    .file-name{
-      font-size:11px;font-weight:600;color:var(--text);
-      white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
-      max-width:70%;
+    .logo-text {}
+    .logo-eyebrow {
+      font-size: 9px; font-weight: 700; letter-spacing: 1.2px;
+      text-transform: uppercase; color: var(--accent);
+      margin-bottom: 4px;
     }
-    .file-count{
-      font-size:11px;font-weight:500;color:var(--text-muted);
-      white-space:nowrap;
+    .logo-title {
+      font-size: 20px; font-weight: 800; letter-spacing: -.4px; color: #fff; line-height: 1;
     }
 
-    /* ── Progress track ── */
-    .progress-track{
-      width:100%;height:5px;
-      background:rgba(255,255,255,.08);
-      border-radius:99px;overflow:hidden;
-      margin-bottom:10px;
+    /* Divider */
+    .divider { height: 1px; background: var(--border); }
+
+    /* Status row */
+    .status-row { display: flex; align-items: flex-start; gap: 10px; }
+    .s-icon {
+      width: 30px; height: 30px; flex-shrink: 0; margin-top: 1px;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text-muted);
     }
-    .progress-fill{
-      height:100%;
-      background:var(--accent);
-      border-radius:99px;
-      width:0%;
-      transition:width .3s ease;
-      box-shadow:0 0 8px rgba(143,180,48,.5);
+    .s-icon svg { width: 14px; height: 14px; }
+    .s-text {}
+    .s-label {
+      font-size: 9px; font-weight: 700; letter-spacing: .8px;
+      text-transform: uppercase; color: var(--text-muted); margin-bottom: 3px;
     }
-    .progress-fill.indeterminate{
-      width:40%!important;
-      animation:indeterminate 1.4s ease-in-out infinite;
+    .s-value { font-size: 13px; font-weight: 500; color: var(--text-sec); line-height: 1.4; }
+
+    /* File row */
+    .file-row { display: flex; align-items: center; gap: 10px; }
+    .f-icon {
+      width: 30px; height: 30px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text-muted);
     }
-    @keyframes indeterminate{
-      0%  {margin-left:-40%;width:40%}
-      50% {margin-left:60%;width:40%}
-      100%{margin-left:120%;width:40%}
+    .f-icon svg { width: 14px; height: 14px; }
+    .f-details { flex: 1; min-width: 0; }
+    .f-name {
+      font-size: 12px; font-weight: 600; color: var(--text);
+      font-family: 'JetBrains Mono', monospace;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .f-sub {
+      font-size: 10px; color: var(--text-muted);
+      font-family: 'JetBrains Mono', monospace; margin-top: 2px;
+    }
+    .f-count {
+      flex-shrink: 0;
+      font-size: 10px; font-weight: 600;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--text-muted);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 5px; padding: 2px 8px;
     }
 
-    /* ── Percent label ── */
-    .pct-row{
-      display:flex;align-items:center;justify-content:space-between;
+    /* Progress */
+    .progress-block {}
+    .progress-head {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 10px;
     }
-    .pct-label{
-      font-size:11px;font-weight:700;color:var(--accent);
+    .progress-label {
+      font-size: 9px; font-weight: 700; letter-spacing: .8px;
+      text-transform: uppercase; color: var(--text-muted);
     }
-    .hint-label{
-      font-size:10px;color:var(--text-muted);
+    .progress-pct {
+      font-size: 13px; font-weight: 700;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--accent);
     }
-
-    /* ── Variant chooser ── */
-    .variant-subtitle{
-      font-size:12px;color:var(--text-sec);margin-bottom:20px;line-height:1.5;
+    .track {
+      width: 100%; height: 3px;
+      background: rgba(255,255,255,.08);
+      border-radius: 99px; overflow: hidden;
+      margin-bottom: 10px;
     }
-    .variant-grid{
-      display:grid;grid-template-columns:1fr 1fr;gap:10px;
+    .fill {
+      height: 100%; border-radius: 99px;
+      background: var(--accent);
+      box-shadow: 0 0 8px var(--accent-glow);
+      width: 0%; transition: width .35s ease;
     }
-    .btn-variant{
-      display:flex;flex-direction:column;align-items:center;justify-content:center;
-      gap:6px;
-      padding:16px 12px;
-      border-radius:12px;
-      border:1px solid var(--border);
-      background:var(--surface);
-      color:var(--text);
-      font-family:'Inter',sans-serif;
-      font-size:13px;font-weight:700;
-      cursor:pointer;
-      transition:.2s;
-      -webkit-tap-highlight-color:transparent;
+    .fill.indeterminate {
+      width: 35% !important;
+      animation: ind 1.6s cubic-bezier(.4,0,.6,1) infinite;
     }
-    .btn-variant:active{transform:scale(.97)}
-    .btn-variant.primary{
-      background:rgba(143,180,48,.12);
-      border-color:rgba(143,180,48,.35);
-      color:var(--accent);
+    @keyframes ind {
+      0%  { margin-left: -35%; }
+      65% { margin-left: 100%; }
+      100%{ margin-left: 100%; }
     }
-    .btn-variant.primary:hover{
-      background:rgba(143,180,48,.2);
-    }
-    .btn-variant:not(.primary):hover{
-      background:rgba(255,255,255,.07);
-    }
-    .variant-icon{
-      font-size:22px;
-    }
-    .variant-desc{
-      font-size:9px;font-weight:500;color:var(--text-muted);text-align:center;
+    .steps { display: flex; gap: 5px; }
+    .step { flex: 1; height: 3px; border-radius: 99px; background: rgba(255,255,255,.08); transition: background .4s; }
+    .step.done   { background: var(--accent); }
+    .step.active { animation: sp 1.1s ease-in-out infinite; }
+    @keyframes sp {
+      0%,100% { background: rgba(143,180,48,.30); }
+      50%      { background: rgba(143,180,48,.65); }
     }
 
-    /* ── Landscape compact ── */
-    @media (max-height:480px){
-      .panel{padding:16px 20px 14px}
-      .logo-row{margin-bottom:12px}
-      .logo-img{width:34px;height:34px}
-      .logo-title{font-size:15px}
-      .status-text{font-size:12px;margin-bottom:10px}
-      .variant-grid{gap:8px}
-      .btn-variant{padding:10px 8px}
-      .variant-icon{font-size:18px}
+    /* Hint line */
+    .hint-line {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 11px; color: var(--text-muted);
+    }
+    .hint-line svg { width: 12px; height: 12px; flex-shrink: 0; }
+
+    /* ── VARIANT ── */
+    .variant-sub { font-size: 13px; color: var(--text-sec); line-height: 1.5; }
+    .variant-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .btn-variant {
+      display: flex; flex-direction: column; align-items: flex-start; gap: 8px;
+      padding: 14px 16px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.04);
+      color: var(--text); font-family: 'Inter', sans-serif;
+      cursor: pointer; text-align: left;
+      transition: border-color .2s, background .2s, transform .1s;
+      -webkit-tap-highlight-color: transparent;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+    .btn-variant:hover { border-color: rgba(255,255,255,.14); background: rgba(255,255,255,.07); }
+    .btn-variant:active { transform: scale(.97); }
+    .btn-variant.primary {
+      background: var(--accent-dim);
+      border-color: var(--accent-border);
+    }
+    .btn-variant.primary:hover {
+      background: rgba(143,180,48,.18);
+      border-color: rgba(143,180,48,.42);
+    }
+    .v-top { display: flex; align-items: center; justify-content: space-between; width: 100%; }
+    .v-icon {
+      width: 30px; height: 30px;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(255,255,255,.07);
+      border: 1px solid var(--border);
+      border-radius: 8px; color: var(--text-sec);
+    }
+    .v-icon svg { width: 15px; height: 15px; }
+    .btn-variant.primary .v-icon {
+      background: var(--accent-dim);
+      border-color: var(--accent-border);
+      color: var(--accent);
+    }
+    .v-rec { font-size: 9px; font-weight: 700; letter-spacing: .6px; text-transform: uppercase; color: var(--accent); }
+    .v-name { font-size: 13px; font-weight: 700; color: #fff; }
+    .v-desc { font-size: 11px; color: var(--text-muted); }
+
+    @media (max-height: 480px) {
+      .topbar { height: 40px; }
+      .page { padding-top: 40px; }
+      .content { gap: 0; }
+      .panel { gap: 14px; }
+      .logo-title { font-size: 16px; }
     }
   </style>
 </head>
 <body>
-  <div class="bg-layer"></div>
-  <div class="bg-overlay"></div>
-  <div class="content">
 
-    <!-- ===== VARIANT CHOOSER ===== -->
-    <div class="panel hidden" id="variant-panel">
-      <div class="logo-row">
-        <img src="assets/logo.png" class="logo-img" alt="Gotham"/>
-        <div class="logo-text">
-          <div class="logo-badge">Arquivos do jogo</div>
-          <div class="logo-title">Escolha a data</div>
-        </div>
-      </div>
-      <p class="variant-subtitle">Selecione o pacote para baixar antes de entrar no jogo.</p>
-      <div class="variant-grid">
-        <button class="btn-variant" id="btn-lite" onclick="onSelectVariant('lite')">
-          <span class="variant-icon">📦</span>
-          Data Lite
-          <span class="variant-desc">Menor tamanho</span>
-        </button>
-        <button class="btn-variant primary" id="btn-full" onclick="onSelectVariant('full')">
-          <span class="variant-icon">🎮</span>
-          Data Full
-          <span class="variant-desc">Conteúdo completo</span>
-        </button>
+<div class="bg-img"></div>
+<div class="bg-fade"></div>
+
+
+<div class="page">
+<div class="content">
+
+  <!-- ══ CHOOSER ══ -->
+  <div class="panel hidden" id="variant-panel">
+
+    <div class="logo-row">
+      <img src="assets/logo.png" class="logo-img" alt="Gotham"/>
+      <div class="logo-text">
+        <div class="logo-eyebrow">Arquivos do jogo</div>
+        <div class="logo-title">Escolha a data</div>
       </div>
     </div>
 
-    <!-- ===== PROGRESS PANEL ===== -->
-    <div class="panel" id="progress-panel">
-      <div class="logo-row">
-        <img src="assets/logo.png" class="logo-img" alt="Gotham"/>
-        <div class="logo-text">
-          <div class="logo-badge">Atualizador</div>
-          <div class="logo-title">Gotham City</div>
+    <div class="divider"></div>
+
+    <p class="variant-sub">Selecione o pacote de arquivos antes de entrar no servidor.</p>
+
+    <div class="variant-grid">
+      <button class="btn-variant" id="btn-lite" onclick="onSelectVariant('lite')">
+        <div class="v-top">
+          <div class="v-icon">
+            <!-- Archive/box icon -->
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 8v13H3V8"/><path d="M1 3h22v5H1z"/><path d="M10 12h4"/>
+            </svg>
+          </div>
         </div>
-      </div>
-      <p class="status-text" id="status-text">Preparando atualização...</p>
-      <div class="file-info-row">
-        <span class="file-name" id="file-name">Aguardando...</span>
-        <span class="file-count" id="file-count"></span>
-      </div>
-      <div class="progress-track">
-        <div class="progress-fill indeterminate" id="progress-fill"></div>
-      </div>
-      <div class="pct-row">
-        <span class="pct-label" id="progress-pct"></span>
-        <span class="hint-label">Não feche o app</span>
-      </div>
+        <div class="v-name">Data Lite</div>
+        <div class="v-desc">Menor tamanho</div>
+      </button>
+      <button class="btn-variant primary" id="btn-full" onclick="onSelectVariant('full')">
+        <div class="v-top">
+          <div class="v-icon">
+            <!-- Gamepad icon -->
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="6" y1="12" x2="10" y2="12"/><line x1="8" y1="10" x2="8" y2="14"/>
+              <circle cx="15" cy="11" r=".5" fill="currentColor"/><circle cx="17" cy="13" r=".5" fill="currentColor"/>
+              <path d="M6 7h12a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2z"/>
+            </svg>
+          </div>
+          <span class="v-rec">Recomendado</span>
+        </div>
+        <div class="v-name">Data Full</div>
+        <div class="v-desc">Conteúdo completo</div>
+      </button>
     </div>
 
   </div>
-  <script>
-    function setStatus(text) {
-      var el = document.getElementById('status-text');
-      if (el) el.textContent = text;
-    }
-    function setFileName(name) {
-      var el = document.getElementById('file-name');
-      if (el) el.textContent = name;
-    }
-    function setFileCount(text) {
-      var el = document.getElementById('file-count');
-      if (el) el.textContent = text;
-    }
-    function setProgress(pct) {
-      var fill = document.getElementById('progress-fill');
-      var pctEl = document.getElementById('progress-pct');
-      if (fill) { fill.classList.remove('indeterminate'); fill.style.width = pct + '%'; }
-      if (pctEl) pctEl.textContent = pct + '%';
-    }
-    function setIndeterminate(val) {
-      var fill = document.getElementById('progress-fill');
-      var pctEl = document.getElementById('progress-pct');
-      if (!fill) return;
-      if (val) { fill.classList.add('indeterminate'); if (pctEl) pctEl.textContent = ''; }
-      else      { fill.classList.remove('indeterminate'); }
-    }
-    function showVariantPanel() {
-      document.getElementById('variant-panel').classList.remove('hidden');
-      document.getElementById('progress-panel').classList.add('hidden');
-    }
-    function showProgressPanel(text) {
-      document.getElementById('variant-panel').classList.add('hidden');
-      document.getElementById('progress-panel').classList.remove('hidden');
-      if (text) setStatus(text);
-    }
-    function onSelectVariant(variantId) {
-      try { UpdateBridge.selectVariant(variantId); } catch(e) {}
-    }
-  </script>
+
+  <!-- ══ PROGRESS ══ -->
+  <div class="panel" id="progress-panel">
+
+    <div class="logo-row">
+      <img src="assets/logo.png" class="logo-img" alt="Gotham"/>
+      <div class="logo-text">
+        <div class="logo-eyebrow">Instalador</div>
+        <div class="logo-title">Gotham City</div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- Status -->
+    <div class="status-row">
+      <div class="s-icon">
+        <!-- Settings/gear icon -->
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3"/>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+        </svg>
+      </div>
+      <div class="s-text">
+        <div class="s-label">Status</div>
+        <div class="s-value" id="status-text">Preparando atualização...</div>
+      </div>
+    </div>
+
+    <!-- File -->
+    <div class="file-row">
+      <div class="f-icon">
+        <!-- File icon -->
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/>
+          <polyline points="13 2 13 9 20 9"/>
+        </svg>
+      </div>
+      <div class="f-details">
+        <div class="f-name" id="file-name">Aguardando...</div>
+        <div class="f-sub" id="file-sub">—</div>
+      </div>
+      <div class="f-count" id="file-count"></div>
+    </div>
+
+    <!-- Progress -->
+    <div class="progress-block">
+      <div class="progress-head">
+        <span class="progress-label">Progresso</span>
+        <span class="progress-pct" id="progress-pct">—</span>
+      </div>
+      <div class="track">
+        <div class="fill indeterminate" id="progress-fill"></div>
+      </div>
+      <div class="steps" id="steps">
+        <div class="step done"   id="step-0"></div>
+        <div class="step active" id="step-1"></div>
+        <div class="step"        id="step-2"></div>
+        <div class="step"        id="step-3"></div>
+      </div>
+    </div>
+
+    <!-- Hint -->
+    <div class="hint-line">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+      </svg>
+      Não feche o aplicativo durante a atualização
+    </div>
+
+  </div>
+
+</div>
+</div>
+
+<script>
+  function setStatus(text) {
+    var el = document.getElementById('status-text');
+    if (el) el.textContent = text;
+  }
+  function setFileName(name) {
+    var el = document.getElementById('file-name');
+    if (el) el.textContent = name || 'Aguardando...';
+  }
+  function setFileSub(text) {
+    var el = document.getElementById('file-sub');
+    if (el) el.textContent = text || '—';
+  }
+  function setFileCount(text) {
+    var el = document.getElementById('file-count');
+    if (el) el.textContent = text || '';
+  }
+  function setProgress(pct) {
+    var fill  = document.getElementById('progress-fill');
+    var pctEl = document.getElementById('progress-pct');
+    if (fill)  { fill.classList.remove('indeterminate'); fill.style.width = pct + '%'; }
+    if (pctEl) pctEl.textContent = pct + '%';
+    _updateSteps(pct);
+  }
+  function setIndeterminate(val) {
+    var fill  = document.getElementById('progress-fill');
+    var pctEl = document.getElementById('progress-pct');
+    if (!fill) return;
+    if (val) { fill.classList.add('indeterminate');    if (pctEl) pctEl.textContent = '—'; }
+    else     { fill.classList.remove('indeterminate'); }
+  }
+  function showVariantPanel() {
+    document.getElementById('variant-panel').classList.remove('hidden');
+    document.getElementById('progress-panel').classList.add('hidden');
+  }
+  function showProgressPanel(text) {
+    document.getElementById('variant-panel').classList.add('hidden');
+    document.getElementById('progress-panel').classList.remove('hidden');
+    if (text) setStatus(text);
+  }
+  function onSelectVariant(variantId) {
+    try { UpdateBridge.selectVariant(variantId); } catch(e) {}
+  }
+  function _updateSteps(pct) {
+    [0,25,50,75].forEach(function(t, i) {
+      var el = document.getElementById('step-' + i);
+      if (!el) return;
+      if (pct >= t + 25)  el.className = 'step done';
+      else if (pct >= t)  el.className = 'step active';
+      else                el.className = 'step';
+    });
+  }
+</script>
 </body>
 </html>
