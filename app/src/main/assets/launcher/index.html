@@ -2,10 +2,42 @@
 <html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>News RP Launcher</title>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,1,0" rel="stylesheet" />
     <link rel="stylesheet" href="style.css" />
+    <style>
+      /* Android extras */
+      html,body{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none}
+      input,textarea{-webkit-user-select:text;user-select:text}
+      .toggle-group{flex-direction:row;align-items:center;justify-content:space-between;background:rgba(255,255,255,.02);padding:12px 16px;border-radius:8px;border:1px solid rgba(255,255,255,.05)}
+      .toggle-switch{position:relative;display:inline-block;width:44px;height:24px;flex-shrink:0}
+      .toggle-switch input{opacity:0;width:0;height:0}
+      .toggle-slider{position:absolute;cursor:pointer;inset:0;background:rgba(255,255,255,.1);border-radius:34px;transition:.2s}
+      .toggle-slider:before{content:"";position:absolute;height:18px;width:18px;left:3px;bottom:3px;background:#fff;border-radius:50%;transition:.2s}
+      input:checked+.toggle-slider{background:var(--accent)}
+      input:checked+.toggle-slider:before{transform:translateX(20px)}
+      .btn-add-server{display:inline-flex;align-items:center;gap:6px;padding:8px 18px;background:var(--accent);color:#0a0a0f;border:none;border-radius:20px;font-size:12px;font-weight:700;cursor:pointer;transition:.2s;-webkit-tap-highlight-color:transparent}
+      .btn-add-server:hover{filter:brightness(1.1)}
+      .info-wrapper{background:rgba(255,255,255,.02);display:flex;align-items:center;padding:0 16px;height:44px;border-radius:8px;border:1px solid rgba(255,255,255,.05);color:var(--text);font-size:13px;font-weight:500}
+      .servers-empty{text-align:center;color:var(--text-muted);padding:48px 0;font-size:14px}
+      .server-actions-row{display:flex;gap:8px;margin-top:4px}
+      .btn-use-server{flex:0 0 auto;display:flex;align-items:center;gap:6px;padding:10px 14px;border:1px solid rgba(255,255,255,.08);border-radius:8px;background:rgba(255,255,255,.04);color:var(--text-sec);font-weight:700;font-size:11px;cursor:pointer;transition:.2s;-webkit-tap-highlight-color:transparent}
+      .btn-use-server:hover{background:rgba(255,255,255,.1);color:#fff}
+      .btn-del-server{flex:0 0 auto;display:flex;align-items:center;padding:10px 12px;border:1px solid rgba(229,57,53,.2);border-radius:8px;background:rgba(229,57,53,.05);color:var(--danger);cursor:pointer;transition:.2s;-webkit-tap-highlight-color:transparent}
+      .btn-del-server:hover{background:rgba(229,57,53,.15)}
+      .badge-selected{position:absolute;top:12px;left:12px;display:flex;align-items:center;gap:4px;background:rgba(143,180,48,.2);border:1px solid rgba(143,180,48,.4);padding:4px 10px;border-radius:20px;font-size:9px;font-weight:700;color:var(--accent);z-index:2}
+      .server-card.is-selected{border-color:rgba(143,180,48,.35)}
+      #nickname-input{width:100%;height:44px;padding:0 16px;background:var(--input-bg);border:1px solid var(--input-border);border-radius:8px;color:var(--text);font-family:Inter,sans-serif;font-size:13px;font-weight:500;outline:none;transition:.2s}
+      #nickname-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-glow)}
+      .settings-sub-header{margin-top:16px;margin-bottom:4px;border-bottom:1px solid rgba(255,255,255,.05);padding-bottom:6px}
+      .settings-sub-header h3{font-size:11px;color:var(--text-muted);text-transform:uppercase;font-weight:700;letter-spacing:.8px}
+      select{width:100%;padding:11px 32px 11px 14px;background:var(--input-bg);border:1px solid var(--input-border);border-radius:8px;color:var(--text);font-family:inherit;font-size:13px;font-weight:500;outline:none;cursor:pointer;appearance:none;transition:.2s}
+      select:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-glow)}
+      select option{background:#15151e;color:var(--text)}
+      .select-wrap{position:relative}
+      .select-wrap::after{content:"";position:absolute;right:14px;top:50%;transform:translateY(-50%);width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-top:5px solid var(--text-sec);pointer-events:none}
+    </style>
   </head>
   <body>
     <!-- ===== LEFT SIDEBAR ===== -->
@@ -16,16 +48,16 @@
       <div class="sidebar-nav">
         <div class="nav-group">
           <button class="nav-btn active" id="nav-home" title="Início">
-            <span class="material-symbols-rounded" style="font-size: 20px;">home</span>
+            <span class="material-symbols-rounded" style="font-size:20px">home</span>
           </button>
           <button class="nav-btn" id="nav-servers" title="Servidores">
-            <span class="material-symbols-rounded" style="font-size: 20px;">widgets</span>
+            <span class="material-symbols-rounded" style="font-size:20px">widgets</span>
           </button>
           <button class="nav-btn" id="nav-settings" title="Configurações">
-            <span class="material-symbols-rounded" style="font-size: 20px;">settings</span>
+            <span class="material-symbols-rounded" style="font-size:20px">settings</span>
           </button>
           <button class="nav-btn" id="nav-changelogs" title="Changelog">
-            <span class="material-symbols-rounded" style="font-size: 20px;">newspaper</span>
+            <span class="material-symbols-rounded" style="font-size:20px">newspaper</span>
           </button>
         </div>
       </div>
@@ -37,32 +69,34 @@
       <header class="topbar">
         <div class="topbar-left">
           <div class="player-count-card" id="topbar-players">
-            <span class="pc-label">Servidor</span>
+            <span class="pc-label">Servidor Ativo:</span>
             <div class="pc-value-row">
-              <span class="material-symbols-rounded" style="font-size: 14px; margin-right: 4px;">dns</span>
-              <span id="selected-server-display">Sem servidor</span>
+              <span class="material-symbols-rounded" style="font-size:14px;margin-right:4px">dns</span>
+              <span id="player-count-num">—</span>
             </div>
           </div>
         </div>
         <div class="topbar-center">
           <div class="version-card" id="topbar-server-badge">
             <div class="v-icon">
-              <span class="material-symbols-rounded" style="font-size: 16px;">check_circle</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
             </div>
             <div class="v-info">
-              <span class="v-label">News RP Mobile</span>
-              <span class="v-value" id="topbar-version">v1.0</span>
+              <span class="v-label">SA-MP Identificado</span>
+              <span class="v-value" id="topbar-server-name">Verificando...</span>
             </div>
           </div>
         </div>
         <div class="topbar-right">
-          <div class="user-profile" id="topbar-nick">
+          <div class="user-profile" id="topbar-profile-click">
             <div class="user-info-text">
               <span class="user-name" id="topbar-username">Jogador</span>
-              <span class="user-discord-tag">SA-MP Mobile</span>
+              <span class="user-discord-tag" id="topbar-discord-tag">SA-MP Mobile</span>
             </div>
-            <div class="user-avatar">
-              <span class="material-symbols-rounded" style="font-size: 20px;">person</span>
+            <div class="user-avatar" id="topbar-avatar">
+              <span class="material-symbols-rounded" style="font-size:20px">person</span>
             </div>
           </div>
         </div>
@@ -78,12 +112,12 @@
           </p>
           <div class="hero-meta">
             <div class="meta-item">
-              <span class="material-symbols-rounded" style="font-size: 16px; margin-right: 4px;">public</span>
+              <span class="material-symbols-rounded" style="font-size:16px;margin-right:4px">public</span>
               <span id="srv-gamemode">News RP | Mobile</span>
             </div>
             <div class="meta-item">
-              <span class="material-symbols-rounded" style="font-size: 16px; margin-right: 4px;">dns</span>
-              <span id="srv-address">Sem servidor ativo</span>
+              <span class="material-symbols-rounded" style="font-size:16px;margin-right:4px">dns</span>
+              <span id="srv-address-home">Sem servidor ativo</span>
             </div>
           </div>
           <div class="hero-actions">
@@ -95,31 +129,28 @@
               <div class="bubble-layer bubble-5"></div>
               <div class="bubble-layer bubble-6"></div>
               <div class="bubble-layer bubble-7"></div>
-              <span style="display: flex; align-items: center;">
-                <span class="material-symbols-rounded" style="font-size: 18px; margin-right: 6px;">play_arrow</span>
+              <span style="display:flex;align-items:center">
+                <span class="material-symbols-rounded" style="font-size:18px;margin-right:6px">play_arrow</span>
                 JOGAR
               </span>
             </button>
             <button class="btn-configure" id="open-settings-btn">
-              <span class="material-symbols-rounded" style="font-size: 18px; margin-right: 4px;">settings</span>
+              <span class="material-symbols-rounded" style="font-size:18px;margin-right:4px">settings</span>
               CONFIGURAR
             </button>
           </div>
         </div>
       </section>
 
-      <!-- ===== SERVERS PAGE ===== -->
-      <section class="page" id="page-servers">
-        <div class="servers-content">
-          <div class="servers-header">
-            <h2 class="servers-title">SERVIDORES</h2>
-            <button class="btn-add-server" id="btn-add-server">
-              <span class="material-symbols-rounded" style="font-size: 16px; margin-right: 4px;">add</span>
-              Adicionar
-            </button>
-          </div>
-          <div class="servers-grid" id="servers-list">
-            <div class="servers-empty">Nenhum servidor salvo.</div>
+      <!-- ===== CHANGELOG PAGE ===== -->
+      <section class="page" id="page-changelogs">
+        <div class="content">
+          <h2 class="section-title">Histórico de Atualizações</h2>
+          <p class="section-subtitle">
+            Acompanhe o que mudou nas últimas versões do News RP Mobile.
+          </p>
+          <div class="changelog-container" id="changelog-list">
+            <div class="changelog-loading">Carregando atualizações...</div>
           </div>
         </div>
       </section>
@@ -132,28 +163,24 @@
           </div>
 
           <div class="settings-grid single-col">
-            <!-- Nickname -->
+
+            <!-- Nome do Jogador (substitui GTA Path) -->
             <div class="setting-group full-width">
               <label class="setting-label">Nome do Jogador</label>
               <div class="path-row">
-                <input
-                  type="text"
-                  id="nickname-input"
-                  placeholder="Seu nome no jogo..."
-                  maxlength="24"
-                />
+                <input type="text" id="nickname-input" placeholder="Seu nome no jogo..." maxlength="24" />
               </div>
             </div>
 
-            <!-- Sistema Section -->
-            <div class="settings-sub-header">
+            <!-- Seção de Jogo -->
+            <div class="settings-sub-header" style="margin-top:24px;margin-bottom:16px">
               <h3>Jogo</h3>
             </div>
 
-            <div class="settings-row">
+            <div class="settings-row" style="margin-bottom:16px">
               <div class="setting-group">
                 <label class="setting-label">Linhas do Chat</label>
-                <div class="select-wrapper">
+                <div class="select-wrap">
                   <select id="chat-lines-select">
                     <option value="5">5 linhas</option>
                     <option value="10">10 linhas</option>
@@ -170,8 +197,7 @@
               </div>
             </div>
 
-            <!-- Toggles -->
-            <div class="settings-row">
+            <div class="settings-row" style="margin-bottom:16px">
               <div class="setting-group toggle-group">
                 <label class="setting-label">Teclado Android</label>
                 <label class="toggle-switch">
@@ -188,39 +214,35 @@
               </div>
             </div>
 
-            <!-- Actions -->
-            <div class="settings-row" style="margin-top: 8px;">
-              <button class="btn-dialog-cancel" id="btn-reinstall" style="flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px;">
-                <span class="material-symbols-rounded" style="font-size: 16px;">download</span>
+            <div class="settings-row" style="gap:16px">
+              <button class="btn-dialog-cancel" id="btn-reinstall" style="flex:1;display:flex;align-items:center;justify-content:center;gap:8px">
+                <span class="material-symbols-rounded" style="font-size:16px">download</span>
                 Reinstalar Dados
               </button>
             </div>
+
           </div>
 
           <button class="btn-save" id="save-settings">
-            <span class="material-symbols-rounded" style="font-size: 18px; margin-right: 4px;">save</span>
+            <span class="material-symbols-rounded" style="font-size:18px;margin-right:4px">save</span>
             SALVAR
           </button>
         </div>
       </section>
 
-      <!-- ===== CHANGELOG PAGE ===== -->
-      <section class="page" id="page-changelogs">
-        <div class="content">
-          <h2 class="section-title">Histórico de Atualizações</h2>
-          <p class="section-subtitle">
-            Acompanhe o que mudou nas últimas versões do News RP Mobile.
-          </p>
-          <div class="changelog-container" id="changelog-list">
-            <div class="changelog-entry">
-              <div class="changelog-version">v1.0.0</div>
-              <div class="changelog-date">2025</div>
-              <ul class="changelog-items">
-                <li>Launcher com interface renovada</li>
-                <li>Suporte a múltiplos servidores</li>
-                <li>Configurações de apelido e chat</li>
-              </ul>
-            </div>
+      <!-- ===== SERVERS PAGE ===== -->
+      <section class="page" id="page-servers">
+        <div class="servers-content">
+          <div class="servers-header">
+            <h2 class="servers-title">SERVIDORES</h2>
+            <span class="servers-count" id="servers-count">0 Disponíveis</span>
+            <button class="btn-add-server" id="btn-add-server">
+              <span class="material-symbols-rounded" style="font-size:16px">add</span>
+              Adicionar
+            </button>
+          </div>
+          <div class="servers-grid" id="servers-list">
+            <div class="servers-empty">Nenhum servidor salvo. Toque em Adicionar.</div>
           </div>
         </div>
       </section>
@@ -228,17 +250,17 @@
       <!-- Bottom Bar -->
       <footer class="bottombar">
         <div class="bottombar-left">
-          <span class="server-address" id="footer-server">
+          <span class="server-address">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <rect x="2" y="2" width="20" height="8" rx="2" />
-              <rect x="2" y="14" width="20" height="8" rx="2" />
-              <circle cx="6" cy="6" r="1" /><circle cx="6" cy="18" r="1" />
+              <rect x="2" y="2" width="20" height="8" rx="2"/>
+              <rect x="2" y="14" width="20" height="8" rx="2"/>
+              <circle cx="6" cy="6" r="1"/><circle cx="6" cy="18" r="1"/>
             </svg>
-            News RP Mobile
+            <span id="footer-server-addr">News RP Mobile</span>
           </span>
         </div>
         <div class="bottombar-right">
-          <span style="font-size: 10px; color: var(--text-muted);">SA-MP Android</span>
+          <span style="font-size:10px;color:var(--text-muted)">SA-MP Android</span>
         </div>
       </footer>
     </div>
@@ -246,41 +268,63 @@
     <!-- ===== ADD SERVER DIALOG ===== -->
     <div class="dialog-overlay hidden" id="add-server-dialog">
       <div class="dialog-box">
-        <div class="dialog-icon">
-          <span class="material-symbols-rounded" style="font-size: 32px;">dns</span>
+        <div class="dialog-header">
+          <div class="dialog-icon">
+            <span class="material-symbols-rounded" style="font-size:24px">dns</span>
+          </div>
+          <h3 class="dialog-title">Adicionar Servidor</h3>
         </div>
-        <div class="dialog-title">Adicionar Servidor</div>
-        <div class="dialog-message">
-          <input type="text" id="server-input" placeholder="IP:PORTA (ex: 127.0.0.1:7777)" style="width:100%;padding:12px 16px;background:var(--input-bg);border:1px solid var(--input-border);border-radius:8px;color:var(--text);font-family:'Inter',sans-serif;font-size:13px;outline:none;margin-top:8px;"/>
-          <div id="server-error" style="color:#ff4444;font-size:12px;margin-top:8px;min-height:18px;"></div>
-        </div>
-        <div class="dialog-footer two-btns">
-          <button class="btn-dialog-cancel" id="btn-server-cancel">Cancelar</button>
-          <button class="btn-dialog-ok" id="btn-server-save">Salvar</button>
+        <p class="dialog-message" style="margin-bottom:12px">Digite o endereço no formato <strong>IP:PORTA</strong></p>
+        <input type="text" id="server-addr-input" placeholder="Ex: 127.0.0.1:7777" style="width:100%;padding:11px 14px;background:var(--input-bg);border:1px solid var(--input-border);border-radius:8px;color:var(--text);font-family:inherit;font-size:13px;outline:none;-webkit-user-select:text;user-select:text" />
+        <p id="add-server-error" style="color:#ff4444;font-size:12px;margin-top:8px;min-height:18px"></p>
+        <div class="dialog-footer two-btns" style="margin-top:20px">
+          <button class="btn-dialog-cancel" id="btn-add-server-cancel">CANCELAR</button>
+          <button class="btn-dialog-ok" id="btn-add-server-save">SALVAR</button>
         </div>
       </div>
     </div>
 
-    <!-- ===== GENERIC DIALOG ===== -->
+    <!-- Custom Dialog Overlay -->
     <div class="dialog-overlay hidden" id="custom-dialog">
-      <div class="dialog-box" id="custom-dialog-box">
-        <div class="dialog-icon">
-          <span class="material-symbols-rounded" style="font-size: 32px;" id="dialog-icon-symbol">info</span>
+      <div class="dialog-box">
+        <div class="dialog-header">
+          <div class="dialog-icon">
+            <span class="material-symbols-rounded" style="font-size:24px" id="dialog-icon-sym">info</span>
+          </div>
+          <h3 class="dialog-title" id="dialog-title">Atenção</h3>
         </div>
-        <div class="dialog-title" id="dialog-title">Aviso</div>
-        <div class="dialog-message" id="dialog-message"></div>
+        <p class="dialog-message" id="dialog-message">Mensagem de aviso aqui.</p>
         <div class="dialog-footer">
-          <button class="btn-dialog-ok" id="btn-dialog-ok">OK</button>
+          <button class="btn-dialog-ok" id="btn-dialog-ok">ENTENDIDO</button>
         </div>
       </div>
     </div>
 
-    <!-- ===== TOAST ===== -->
-    <div class="toast" id="toast">
-      <span class="material-symbols-rounded" style="font-size: 16px;">check_circle</span>
-      <span id="toast-msg">Salvo!</span>
+    <!-- Confirmation Dialog (Unsaved Changes) -->
+    <div class="dialog-overlay hidden" id="confirm-dialog">
+      <div class="dialog-box">
+        <div class="dialog-header">
+          <div class="dialog-icon">
+            <span class="material-symbols-rounded" style="font-size:24px">save_as</span>
+          </div>
+          <h3 class="dialog-title">Alterações não salvas</h3>
+        </div>
+        <p class="dialog-message">Você tem alterações pendentes. O que deseja fazer?</p>
+        <div class="dialog-footer two-btns">
+          <button class="btn-dialog-cancel" id="btn-confirm-discard">REVERTER</button>
+          <button class="btn-dialog-ok" id="btn-confirm-save">SALVAR</button>
+        </div>
+      </div>
     </div>
 
-    <script src="script.js"></script>
+    <!-- Toast Notification -->
+    <div id="settings-toast" class="toast">
+      <div class="toast-icon">
+        <span class="material-symbols-rounded" style="font-size:18px">check</span>
+      </div>
+      <span id="toast-message">Configuração salva com sucesso!</span>
+    </div>
+
+    <script src="script.js" defer></script>
   </body>
 </html>
