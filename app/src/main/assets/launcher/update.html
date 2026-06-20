@@ -75,8 +75,8 @@
     .logo-img {
       width: 42px; height: 42px; flex-shrink: 0;
       border-radius: 10px;
-      border: 1px solid var(--accent-border);
-      background: var(--accent-dim);
+      border: none;
+      background: transparent;
       object-fit: contain; padding: 6px;
     }
     .logo-text {}
@@ -86,7 +86,7 @@
       margin-bottom: 4px;
     }
     .logo-title {
-      font-size: 20px; font-weight: 800; letter-spacing: -.4px; color: #fff; line-height: 1;
+      font-size: 20px; font-weight: 800; letter-spacing: -.4px; color: #fff; line-height: 1; text-transform: uppercase;
     }
 
     /* Divider */
@@ -135,9 +135,9 @@
       flex-shrink: 0;
       font-size: 10px; font-weight: 600;
       font-family: 'JetBrains Mono', monospace;
-      color: var(--text-muted);
-      background: var(--surface);
-      border: 1px solid var(--border);
+      color: var(--accent);
+      background: var(--accent-dim);
+      border: 1px solid var(--accent-border);
       border-radius: 5px; padding: 2px 8px;
     }
 
