@@ -188,10 +188,10 @@ public class SplashActivity extends SampActivity {
                     || gameStatus == UpdateActivity.GameStatus.GameUpdateRequired) {
                 startGameDataUpdate();
             } else if (gameStatus == UpdateActivity.GameStatus.Updated) {
-                startActivity(new Intent(SplashActivity.this, MainActivity.class));
+                startActivity(new Intent(SplashActivity.this, WebLauncherActivity.class));
                 finish();
             } else if (hasRequiredGameData()) {
-                startActivity(new Intent(SplashActivity.this, MainActivity.class));
+                startActivity(new Intent(SplashActivity.this, WebLauncherActivity.class));
                 finish();
             } else {
                 showSourceUnavailableDialog();
@@ -202,7 +202,7 @@ public class SplashActivity extends SampActivity {
     public void checkUpdate() {
         Log.d("x1y2z", "checkUpdate");
         if (hasRequiredGameData()) {
-            startActivity(new Intent(SplashActivity.this, MainActivity.class));
+            startActivity(new Intent(SplashActivity.this, WebLauncherActivity.class));
             finish();
             return;
         }
