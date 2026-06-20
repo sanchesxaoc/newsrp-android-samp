@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+  <title>Gotham City — Atualizando</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet"/>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --accent:#8fb430;
+      --accent-dim:rgba(143,180,48,.15);
+      --bg:#0d0d14;
+      --text:#e8e8f0;
+      --text-sec:rgba(232,232,240,.6);
+      --text-muted:rgba(232,232,240,.35);
+      --surface:rgba(255,255,255,.03);
+      --border:rgba(255,255,255,.07);
+    }
+    html,body{
+      width:100%;height:100%;overflow:hidden;
+      background:var(--bg);
+      font-family:'Inter',sans-serif;
+      -webkit-user-select:none;user-select:none;
+    }
+
+    /* ── Background banner ── */
+    .bg-layer{
+      position:fixed;inset:0;
+      background:url('assets/update_banner.jpg') center center/cover no-repeat;
+      z-index:0;
+    }
+    .bg-overlay{
+      position:fixed;inset:0;
+      background:linear-gradient(to top,#0d0d14 0%,#0d0d14 30%,rgba(13,13,20,.92) 55%,rgba(13,13,20,.6) 100%);
+      z-index:1;
+    }
+
+    /* ── Content wrapper ── */
+    .content{
+      position:relative;z-index:2;
+      width:100%;height:100%;
+      display:flex;align-items:center;justify-content:center;
+    }
+
+    /* ── Panel shared ── */
+    .panel{
+      width:min(560px,90vw);
+      background:rgba(13,13,20,.85);
+      border:1px solid var(--border);
+      border-radius:16px;
+      padding:28px 28px 24px;
+      backdrop-filter:blur(20px);
+      -webkit-backdrop-filter:blur(20px);
+      box-shadow:0 24px 64px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.04);
+      animation:panelIn .35s cubic-bezier(.2,.8,.2,1) both;
+    }
+    @keyframes panelIn{
+      from{opacity:0;transform:translateY(18px) scale(.97)}
+      to  {opacity:1;transform:translateY(0)    scale(1)}
+    }
+    .hidden{display:none!important}
+
+    /* ── Logo row ── */
+    .logo-row{
+      display:flex;align-items:center;gap:14px;margin-bottom:22px;
+    }
+    .logo-img{
+      width:44px;height:44px;border-radius:10px;
+      border:1px solid rgba(143,180,48,.3);
+      background:rgba(143,180,48,.08);
+      object-fit:contain;padding:4px;
+      flex-shrink:0;
+    }
+    .logo-text{}
+    .logo-badge{
+      display:inline-block;
+      background:rgba(143,180,48,.15);
+      border:1px solid rgba(143,180,48,.3);
+      color:var(--accent);
+      font-size:9px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;
+      padding:3px 9px;border-radius:20px;margin-bottom:4px;
+    }
+    .logo-title{
+      font-size:18px;font-weight:900;color:#fff;letter-spacing:-.3px;line-height:1;
+    }
+
+    /* ── Status text ── */
+    .status-text{
+      font-size:13px;font-weight:500;color:var(--text-sec);
+      margin-bottom:18px;line-height:1.4;
+    }
+
+    /* ── File info row ── */
+    .file-info-row{
+      display:flex;align-items:center;justify-content:space-between;
+      margin-bottom:10px;
+    }
+    .file-name{
+      font-size:11px;font-weight:600;color:var(--text);
+      white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+      max-width:70%;
+    }
+    .file-count{
+      font-size:11px;font-weight:500;color:var(--text-muted);
+      white-space:nowrap;
+    }
+
+    /* ── Progress track ── */
+    .progress-track{
+      width:100%;height:5px;
+      background:rgba(255,255,255,.08);
+      border-radius:99px;overflow:hidden;
+      margin-bottom:10px;
+    }
+    .progress-fill{
+      height:100%;
+      background:var(--accent);
+      border-radius:99px;
+      width:0%;
+      transition:width .3s ease;
+      box-shadow:0 0 8px rgba(143,180,48,.5);
+    }
+    .progress-fill.indeterminate{
+      width:40%!important;
+      animation:indeterminate 1.4s ease-in-out infinite;
+    }
+    @keyframes indeterminate{
+      0%  {margin-left:-40%;width:40%}
+      50% {margin-left:60%;width:40%}
+      100%{margin-left:120%;width:40%}
+    }
+
+    /* ── Percent label ── */
+    .pct-row{
+      display:flex;align-items:center;justify-content:space-between;
+    }
+    .pct-label{
+      font-size:11px;font-weight:700;color:var(--accent);
+    }
+    .hint-label{
+      font-size:10px;color:var(--text-muted);
+    }
+
+    /* ── Variant chooser ── */
+    .variant-subtitle{
+      font-size:12px;color:var(--text-sec);margin-bottom:20px;line-height:1.5;
+    }
+    .variant-grid{
+      display:grid;grid-template-columns:1fr 1fr;gap:10px;
+    }
+    .btn-variant{
+      display:flex;flex-direction:column;align-items:center;justify-content:center;
+      gap:6px;
+      padding:16px 12px;
+      border-radius:12px;
+      border:1px solid var(--border);
+      background:var(--surface);
+      color:var(--text);
+      font-family:'Inter',sans-serif;
+      font-size:13px;font-weight:700;
+      cursor:pointer;
+      transition:.2s;
+      -webkit-tap-highlight-color:transparent;
+    }
+    .btn-variant:active{transform:scale(.97)}
+    .btn-variant.primary{
+      background:rgba(143,180,48,.12);
+      border-color:rgba(143,180,48,.35);
+      color:var(--accent);
+    }
+    .btn-variant.primary:hover{
+      background:rgba(143,180,48,.2);
+    }
+    .btn-variant:not(.primary):hover{
+      background:rgba(255,255,255,.07);
+    }
+    .variant-icon{
+      font-size:22px;
+    }
+    .variant-desc{
+      font-size:9px;font-weight:500;color:var(--text-muted);text-align:center;
+    }
+
+    /* ── Landscape compact ── */
+    @media (max-height:480px){
+      .panel{padding:16px 20px 14px}
+      .logo-row{margin-bottom:12px}
+      .logo-img{width:34px;height:34px}
+      .logo-title{font-size:15px}
+      .status-text{font-size:12px;margin-bottom:10px}
+      .variant-grid{gap:8px}
+      .btn-variant{padding:10px 8px}
+      .variant-icon{font-size:18px}
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-layer"></div>
+  <div class="bg-overlay"></div>
+  <div class="content">
+
+    <!-- ===== VARIANT CHOOSER ===== -->
+    <div class="panel hidden" id="variant-panel">
+      <div class="logo-row">
+        <img src="assets/logo.png" class="logo-img" alt="Gotham"/>
+        <div class="logo-text">
+          <div class="logo-badge">Arquivos do jogo</div>
+          <div class="logo-title">Escolha a data</div>
+        </div>
+      </div>
+      <p class="variant-subtitle">Selecione o pacote para baixar antes de entrar no jogo.</p>
+      <div class="variant-grid">
+        <button class="btn-variant" id="btn-lite" onclick="onSelectVariant('lite')">
+          <span class="variant-icon">📦</span>
+          Data Lite
+          <span class="variant-desc">Menor tamanho</span>
+        </button>
+        <button class="btn-variant primary" id="btn-full" onclick="onSelectVariant('full')">
+          <span class="variant-icon">🎮</span>
+          Data Full
+          <span class="variant-desc">Conteúdo completo</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- ===== PROGRESS PANEL ===== -->
+    <div class="panel" id="progress-panel">
+      <div class="logo-row">
+        <img src="assets/logo.png" class="logo-img" alt="Gotham"/>
+        <div class="logo-text">
+          <div class="logo-badge">Atualizador</div>
+          <div class="logo-title">Gotham City</div>
+        </div>
+      </div>
+      <p class="status-text" id="status-text">Preparando atualização...</p>
+      <div class="file-info-row">
+        <span class="file-name" id="file-name">Aguardando...</span>
+        <span class="file-count" id="file-count"></span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill indeterminate" id="progress-fill"></div>
+      </div>
+      <div class="pct-row">
+        <span class="pct-label" id="progress-pct"></span>
+        <span class="hint-label">Não feche o app</span>
+      </div>
+    </div>
+
+  </div>
+  <script>
+    function setStatus(text) {
+      var el = document.getElementById('status-text');
+      if (el) el.textContent = text;
+    }
+    function setFileName(name) {
+      var el = document.getElementById('file-name');
+      if (el) el.textContent = name;
+    }
+    function setFileCount(text) {
+      var el = document.getElementById('file-count');
+      if (el) el.textContent = text;
+    }
+    function setProgress(pct) {
+      var fill = document.getElementById('progress-fill');
+      var pctEl = document.getElementById('progress-pct');
+      if (fill) { fill.classList.remove('indeterminate'); fill.style.width = pct + '%'; }
+      if (pctEl) pctEl.textContent = pct + '%';
+    }
+    function setIndeterminate(val) {
+      var fill = document.getElementById('progress-fill');
+      var pctEl = document.getElementById('progress-pct');
+      if (!fill) return;
+      if (val) { fill.classList.add('indeterminate'); if (pctEl) pctEl.textContent = ''; }
+      else      { fill.classList.remove('indeterminate'); }
+    }
+    function showVariantPanel() {
+      document.getElementById('variant-panel').classList.remove('hidden');
+      document.getElementById('progress-panel').classList.add('hidden');
+    }
+    function showProgressPanel(text) {
+      document.getElementById('variant-panel').classList.add('hidden');
+      document.getElementById('progress-panel').classList.remove('hidden');
+      if (text) setStatus(text);
+    }
+    function onSelectVariant(variantId) {
+      try { UpdateBridge.selectVariant(variantId); } catch(e) {}
+    }
+  </script>
+</body>
+</html>
