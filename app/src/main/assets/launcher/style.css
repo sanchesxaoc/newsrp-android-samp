@@ -3105,249 +3105,26 @@ select option {
 .changelog-items { margin-left: 20px; margin-bottom: 16px; color: var(--text-sec); font-size: 14px; line-height: 1.6; }
 .changelog-items li { margin-bottom: 6px; }
 
-/* ===== MOBILE RESPONSIVE (Android WebView) ===== */
-@media (max-width: 600px) {
-  :root {
-    --sidebar-w: 52px;
-    --topbar-h: 44px;
-    --bottom-h: 36px;
-  }
-
-  /* Sidebar menor */
-  .sidebar-logo {
-    width: 34px;
-    height: 34px;
-  }
-
-  .sidebar-top {
-    top: 10px;
-  }
-
-  .nav-group {
-    width: 40px;
-    gap: 4px;
-    padding: 4px 0;
-  }
-
-  .nav-btn {
-    width: 36px;
-    height: 36px;
-  }
-
-  /* Topbar: remover padding-top excessivo */
-  .topbar {
-    padding: 10px 12px 0;
-    height: auto;
-    min-height: var(--topbar-h);
-    gap: 6px;
-  }
-
-  .topbar-left,
-  .topbar-center,
-  .topbar-right {
-    gap: 4px;
-  }
-
-  /* Cards do topbar menores */
-  .player-count-card {
-    padding: 4px 8px;
-    border-radius: 14px;
-  }
-
-  .pc-label {
-    font-size: 8px;
-  }
-
-  #player-count-num {
-    font-size: 10px;
-  }
-
-  .version-card {
-    padding: 4px 8px 4px 6px;
-    gap: 6px;
-    border-radius: 16px;
-  }
-
-  .v-icon {
-    width: 22px;
-    height: 22px;
-  }
-
-  .v-label {
-    font-size: 9px;
-  }
-
-  .v-value {
-    font-size: 9px;
-  }
-
-  .user-profile {
-    padding: 4px 8px;
-    gap: 8px;
-    border-radius: 20px;
-  }
-
-  .user-name {
-    font-size: 11px;
-  }
-
-  .user-discord-tag {
-    font-size: 9px;
-  }
-
-  .user-avatar {
-    width: 28px;
-    height: 28px;
-  }
-
-  /* ===== HOME PAGE ===== */
-  #page-home {
-    align-items: flex-start;
-    padding-top: 24px;
-    padding-bottom: calc(var(--bottom-h) + 8px);
-  }
-
-  .hero-content {
-    padding: 0 18px;
-    max-width: 100%;
-  }
-
-  .hero-title {
-    font-size: 36px;
-    letter-spacing: -1px;
-    margin-bottom: 12px;
-  }
-
-  .hero-description {
-    font-size: 12px;
-    line-height: 1.5;
-    margin-bottom: 20px;
-    max-width: 100%;
-  }
-
-  .hero-meta {
-    gap: 8px;
-    margin-bottom: 20px;
-    flex-wrap: wrap;
-  }
-
-  .meta-item {
-    font-size: 11px;
-    padding: 4px 10px;
-  }
-
-  .hero-actions {
-    gap: 8px;
-    flex-wrap: wrap;
-  }
-
-  .btn-play-bubble {
-    padding: 11px 28px;
-    font-size: 12px;
-  }
-
-  .btn-configure {
-    padding: 9px 16px;
-    font-size: 12px;
-  }
-
-  /* ===== BOTTOM BAR ===== */
-  .bottombar {
-    padding: 0 16px;
-    bottom: 8px;
-  }
-
-  .server-address {
-    font-size: 10px;
-    padding: 4px 10px;
-  }
-
-  /* ===== SETTINGS PAGE ===== */
-  .settings-content {
-    padding: 0 16px;
-  }
-
-  .settings-header h2 {
-    font-size: 22px;
-  }
-
-  .settings-grid.single-col {
-    gap: 14px;
-  }
-
-  .settings-row {
-    grid-template-columns: 1fr;
-    gap: 14px;
-  }
-
-  /* ===== SERVERS PAGE ===== */
-  .servers-content {
-    padding: 20px 16px 60px;
-  }
-
-  .servers-header {
-    margin-bottom: 20px;
-    gap: 10px;
-    flex-wrap: wrap;
-  }
-
-  .servers-title {
-    font-size: 20px;
-  }
-
-  .server-card-header {
-    height: 120px;
-  }
-
-  .server-card-body {
-    padding: 16px;
-    gap: 12px;
-  }
-
-  /* ===== CHANGELOG PAGE ===== */
-  #page-changelogs .content {
-    padding: 20px 16px 60px;
-  }
-
-  .section-title {
-    font-size: 20px;
-  }
-
-  /* ===== DIALOGS ===== */
-  .dialog-box {
-    margin: 16px;
-    padding: 20px 16px;
-    max-width: calc(100vw - 32px);
-  }
-
-  .dialog-title {
-    font-size: 16px;
-  }
-
-  .dialog-message {
-    font-size: 13px;
-  }
-}
 
 /* ===== MOBILE RESPONSIVE — Portrait ≤ 520px ===== */
 @media (max-width: 520px) {
   :root {
-    --sidebar-w: 48px;
-    --topbar-h: 40px;
-    --bottom-h: 32px;
+    --sidebar-w: 38px;
+    --topbar-h: 28px;
+    --bottom-h: 26px;
   }
 
   /* ── Sidebar ── */
-  .sidebar-logo { width: 28px; height: 28px; }
-  .sidebar-top  { top: 8px; }
-  .sidebar-nav  { gap: 8px; }
-  .nav-group    { width: 36px; padding: 3px 0; gap: 2px; border-radius: 14px; }
-  .nav-btn      { width: 32px; height: 32px; }
-  .nav-btn .material-symbols-rounded { font-size: 16px !important; }
+  .sidebar-logo { width: 20px; height: 20px; }
+  .sidebar-top  { top: 6px; }
+  .sidebar-nav  { gap: 4px; }
+  .nav-group    { width: 30px; padding: 2px 0; gap: 1px; border-radius: 10px; }
+  .nav-btn      { width: 26px; height: 26px; }
+  .nav-btn .material-symbols-rounded { font-size: 13px !important; }
 
-  /* ── Topbar: esconde card central, compacta left/right ── */
+  /* ── Topbar ── */
   .topbar {
-    padding: 0 8px;
+    padding: 0 6px;
     gap: 4px;
     min-height: var(--topbar-h);
   }
@@ -3355,24 +3132,27 @@ select option {
   .topbar-left, .topbar-right { flex: 0 0 auto; }
 
   .player-count-card {
-    padding: 3px 7px;
-    border-radius: 10px;
-    gap: 1px;
+    padding: 1px 4px;
+    border-radius: 6px;
+    gap: 0;
   }
-  .pc-label       { font-size: 7px; }
-  #player-count-num { font-size: 9px; }
+  .pc-label         { font-size: 5px; letter-spacing: 0; }
+  #player-count-num { font-size: 6px; }
+  .pc-value-row .material-symbols-rounded { font-size: 7px !important; }
 
-  .user-profile   { padding: 3px 7px; gap: 6px; border-radius: 16px; }
-  .user-name      { font-size: 10px; }
+  .user-profile  { padding: 1px 4px; gap: 3px; border-radius: 8px; background: transparent; }
+  .user-name     { font-size: 7px; }
   .user-discord-tag { display: none; }
-  .user-avatar    { width: 24px; height: 24px; }
-  .user-avatar .material-symbols-rounded { font-size: 14px !important; }
+  .user-avatar   { width: 16px; height: 16px; }
+  .user-avatar .material-symbols-rounded { font-size: 10px !important; }
 
   /* ── Home page ── */
   #page-home {
+    flex-direction: column;
+    justify-content: center;
     align-items: flex-start;
-    padding-top: calc(var(--topbar-h) + 6px);
-    padding-bottom: calc(var(--bottom-h) + 6px);
+    padding-top: calc(var(--topbar-h) + 4px);
+    padding-bottom: calc(var(--bottom-h) + 4px);
   }
 
   .hero-content {
@@ -3381,80 +3161,80 @@ select option {
   }
 
   .hero-title {
-    font-size: clamp(22px, 8vw, 36px);
-    margin-bottom: 8px;
+    font-size: clamp(20px, 7vw, 32px);
+    margin-bottom: 6px;
     letter-spacing: -1px;
   }
 
   .hero-description {
-    font-size: 11px;
-    line-height: 1.45;
-    margin-bottom: 12px;
+    font-size: 10px;
+    line-height: 1.4;
+    margin-bottom: 10px;
     max-width: 100%;
   }
 
   .hero-meta {
-    gap: 6px;
-    margin-bottom: 14px;
+    gap: 5px;
+    margin-bottom: 12px;
     flex-wrap: wrap;
   }
 
   .meta-item {
-    font-size: 8px;
-    padding: 2px 6px;
-    gap: 3px;
+    font-size: 7px;
+    padding: 2px 5px;
+    gap: 2px;
   }
 
-  .meta-item .material-symbols-rounded { font-size: 10px !important; }
+  .meta-item .material-symbols-rounded { font-size: 9px !important; }
 
   .hero-actions { gap: 6px; flex-wrap: wrap; }
 
   .btn-play-bubble {
-    padding: 10px 22px;
-    font-size: 11px;
-    letter-spacing: 0.5px;
+    padding: 9px 20px;
+    font-size: 10px;
+    letter-spacing: 0.4px;
   }
 
   .btn-configure {
-    padding: 8px 14px;
-    font-size: 11px;
-    letter-spacing: 0.5px;
+    padding: 7px 12px;
+    font-size: 10px;
+    letter-spacing: 0.4px;
   }
 
   /* ── Bottom bar ── */
-  .bottombar { padding: 0 12px; bottom: 6px; }
-  .server-address { font-size: 9px; padding: 3px 8px; }
+  .bottombar { padding: 0 10px; bottom: 4px; }
+  .server-address { font-size: 6px; padding: 1px 5px; }
   .bottombar-right { display: none; }
 
   /* ── Settings ── */
   #page-settings { justify-content: flex-start; padding-top: calc(var(--topbar-h) + 8px); }
   .settings-content { padding: 0 14px; }
-  .settings-header h2 { font-size: 18px; }
-  .settings-grid.single-col { gap: 12px; }
-  .settings-row { grid-template-columns: 1fr; gap: 12px; }
-  .btn-save { padding: 12px 24px; font-size: 12px; width: 100%; justify-content: center; }
+  .settings-header h2 { font-size: 16px; }
+  .settings-grid.single-col { gap: 10px; }
+  .settings-row { grid-template-columns: 1fr; gap: 10px; }
+  .btn-save { padding: 10px 20px; font-size: 11px; width: 100%; justify-content: center; }
 
   /* ── Servers ── */
-  .servers-content { padding: 14px 12px 60px; }
-  .servers-header  { margin-bottom: 14px; gap: 8px; flex-wrap: wrap; }
-  .servers-title   { font-size: 18px; }
-  .server-card-header { height: 100px; }
-  .server-card-body   { padding: 12px; gap: 10px; }
+  .servers-content { padding: 12px 12px 50px; }
+  .servers-header  { margin-bottom: 12px; gap: 6px; flex-wrap: wrap; }
+  .servers-title   { font-size: 16px; }
+  .server-card-header { height: 80px; }
+  .server-card-body   { padding: 10px; gap: 8px; }
 
   /* ── Changelog ── */
-  #page-changelogs .content { padding: 14px 12px 60px; }
-  .section-title { font-size: 18px; }
-  .changelog-container { padding: 16px; }
+  #page-changelogs .content { padding: 12px 12px 50px; }
+  .section-title { font-size: 16px; }
+  .changelog-container { padding: 12px; }
 
   /* ── Dialogs ── */
   .dialog-box {
-    margin: 12px;
-    padding: 18px 14px;
-    max-width: calc(100vw - 24px);
-    border-radius: 16px;
+    margin: 10px;
+    padding: 16px 12px;
+    max-width: calc(100vw - 20px);
+    border-radius: 14px;
   }
-  .dialog-title   { font-size: 15px; }
-  .dialog-message { font-size: 12px; }
+  .dialog-title   { font-size: 13px; }
+  .dialog-message { font-size: 11px; }
 }
 
 /* ===== LANDSCAPE MOBILE ≤ 900px height ===== */
