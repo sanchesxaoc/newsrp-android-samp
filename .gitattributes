@@ -1,5 +1,4 @@
 * text=auto eol=lf
-
 *.png binary
 *.webp binary
 *.jpg binary
@@ -10,3 +9,4 @@
 *.gxt binary
 *.scm binary
 *.img binary
+zipFile.zip filter=lfs diff=lfs merge=lfs -text
