@@ -15,7 +15,7 @@ android {
         versionName "0.0.1"
 
         multiDexEnabled true
-        manifestPlaceholders = [appLabel: "News RP"]
+        manifestPlaceholders = [appLabel: "Gotham Launcher"]
         buildConfigField "String", "XYRON_APK_ROLE", "\"all\""
         buildConfigField "String", "XYRON_GAME_PACKAGE", "\"com.xyron.game\""
         buildConfigField "String", "XYRON_TOOLS_PACKAGE", "\"com.xyron.game\""
