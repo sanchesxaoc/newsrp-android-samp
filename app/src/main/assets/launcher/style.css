@@ -3107,7 +3107,7 @@ select option {
 
 
 /* ===== MOBILE RESPONSIVE — Portrait ≤ 520px ===== */
-@media (max-width: 520px) {
+@media (max-width: 520px) and (orientation: portrait) {
   :root {
     --sidebar-w: 38px;
     --topbar-h: 28px;
@@ -3253,61 +3253,83 @@ select option {
     max-width: 100%;
   }
 
-@media (max-height: 500px) and (max-width: 900px) {
+@media (max-height: 500px) and (orientation: landscape) {
   :root {
-    --sidebar-w: 44px;
-    --topbar-h: 36px;
-    --bottom-h: 28px;
+    --sidebar-w: 38px;
+    --topbar-h: 22px;
+    --bottom-h: 18px;
   }
 
-  .topbar { padding: 0 clamp(10px, 3vw, 32px); }
+  /* ── Topbar ── */
+  .topbar { padding: 0 6px; }
   .topbar-center { display: none; }
   .user-discord-tag { display: none; }
-  .user-avatar { width: 24px; height: 24px; }
+  .user-avatar { width: 16px; height: 16px; }
+  .user-avatar .material-symbols-rounded { font-size: 10px !important; }
+  .user-name { font-size: 7px; }
+  .user-profile { padding: 1px 4px; gap: 3px; background: transparent; }
 
+  .player-count-card { padding: 1px 4px; border-radius: 5px; gap: 0; }
+  .pc-label { font-size: 5px; }
+  #player-count-num { font-size: 6px; }
+  .pc-value-row .material-symbols-rounded { font-size: 7px !important; }
+
+  /* ── Sidebar ── */
+  .sidebar-logo { width: 18px; height: 18px; }
+  .sidebar-top { top: 5px; }
+  .sidebar-nav { gap: 2px; }
+  .nav-group { width: 28px; padding: 2px 0; gap: 1px; border-radius: 8px; }
+  .nav-btn { width: 24px; height: 24px; }
+  .nav-btn .material-symbols-rounded { font-size: 12px !important; }
+
+  /* ── Home ── */
   #page-home {
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
     padding-top: calc(var(--topbar-h) + 4px);
     padding-bottom: calc(var(--bottom-h) + 4px);
-    align-items: flex-start;
   }
 
-  .hero-content { padding: 0 clamp(10px, 3vw, 32px); }
-  .hero-title   { font-size: clamp(20px, 5vw, 40px); margin-bottom: 6px; }
-  .hero-description { font-size: 11px; margin-bottom: 10px; }
-  .hero-meta    { margin-bottom: 10px; gap: 6px; }
-  .meta-item    { font-size: 8px; padding: 2px 6px; gap: 3px; }
-  .hero-actions { gap: 6px; }
-  .btn-play-bubble { padding: 9px 20px; font-size: 11px; }
-  .btn-configure   { padding: 7px 12px; font-size: 11px; }
+  .hero-content { padding: 0 clamp(8px, 2vw, 20px); max-width: 60%; }
+  .hero-title   { font-size: clamp(16px, 4vw, 32px); margin-bottom: 4px; letter-spacing: -0.5px; }
+  .hero-description { font-size: 9px; margin-bottom: 6px; line-height: 1.35; }
+  .hero-meta    { margin-bottom: 8px; gap: 4px; flex-wrap: wrap; }
+  .meta-item    { font-size: 6px; padding: 1px 4px; gap: 2px; }
+  .meta-item .material-symbols-rounded { font-size: 8px !important; }
+  .hero-actions { gap: 5px; flex-wrap: wrap; }
+  .btn-play-bubble { padding: 7px 16px; font-size: 9px; }
+  .btn-configure   { padding: 5px 10px; font-size: 9px; }
 
-  .bottombar { padding: 0 clamp(10px, 3vw, 32px); bottom: 4px; }
-  .sidebar-logo { width: 26px; height: 26px; }
-  .nav-btn { width: 30px; height: 30px; }
+  /* ── Bottombar ── */
+  .bottombar { padding: 0 8px; bottom: 3px; }
+  .server-address { font-size: 5px; padding: 1px 4px; }
+  .bottombar-right { display: none; }
 
-  /* ── Settings page: scroll vertical, conteúdo visível ── */
+  /* ── Settings ── */
   #page-settings {
     justify-content: flex-start;
     align-items: flex-start;
     overflow-y: auto;
-    padding-top: calc(var(--topbar-h) + 8px);
-    padding-bottom: calc(var(--bottom-h) + 8px);
-    padding-left: calc(var(--sidebar-w) + 12px);
-    padding-right: 12px;
+    padding-top: calc(var(--topbar-h) + 6px);
+    padding-bottom: calc(var(--bottom-h) + 6px);
+    padding-left: calc(var(--sidebar-w) + 10px);
+    padding-right: 10px;
   }
   .settings-content { padding: 0; max-width: 100%; width: 100%; }
-  .settings-header { margin-bottom: 6px; }
-  .settings-header h2, .settings-page-title { font-size: 14px; letter-spacing: 1px; }
-  .settings-grid.single-col { gap: 8px; }
-  .settings-col { gap: 8px; }
-  .settings-row { grid-template-columns: 1fr 1fr; gap: 8px; }
-  .input-icon-wrapper { height: 36px; }
-  .input-icon { width: 16px; height: 16px; left: 10px; }
+  .settings-header { margin-bottom: 4px; }
+  .settings-header h2, .settings-page-title { font-size: 12px; letter-spacing: 1px; }
+  .settings-grid.single-col { gap: 6px; }
+  .settings-col { gap: 6px; }
+  .settings-row { grid-template-columns: 1fr 1fr; gap: 6px; }
+  .input-icon-wrapper { height: 30px; }
+  .input-icon { width: 14px; height: 14px; left: 8px; }
   #username-input, #gta-path-input, .select-wrapper select {
-    font-size: 11px;
-    padding: 0 10px 0 32px;
+    font-size: 10px;
+    padding: 0 8px 0 26px;
   }
-  .toggle-card { padding: 8px 10px; }
-  .toggle-label { font-size: 10px; letter-spacing: 0.5px; }
-  .reinstall-btn { padding: 8px 12px; font-size: 10px; }
-  .btn-save { padding: 8px 20px; font-size: 11px; margin-top: 8px; }
+  .toggle-card { padding: 6px 8px; }
+  .toggle-label { font-size: 9px; letter-spacing: 0.4px; }
+  .reinstall-btn { padding: 6px 10px; font-size: 9px; }
+  .btn-save { padding: 6px 16px; font-size: 10px; margin-top: 6px; }
 }
