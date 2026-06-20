@@ -161,7 +161,7 @@ public class UpdateActivity extends SampActivity {
                     callJs("setFileCount", "");
                     callJs("setIndeterminate", false);
                     callJs("setProgress", 0);
-                    startActivity(new Intent(UpdateActivity.this, SplashActivity.class));
+                    startActivity(new Intent(UpdateActivity.this, WebLauncherActivity.class));
                     finish();
 
                 } else if (!mIsStartingUpdate) {
@@ -183,7 +183,7 @@ public class UpdateActivity extends SampActivity {
                         mGameApk = new File(string3);
                     }
                     if (mGameApk == null || !mGameApk.exists()) {
-                        startActivity(new Intent(UpdateActivity.this, SplashActivity.class));
+                        startActivity(new Intent(UpdateActivity.this, WebLauncherActivity.class));
                         finish();
                     } else {
                         requestInstallGame();
@@ -236,7 +236,7 @@ public class UpdateActivity extends SampActivity {
             if (mGameApk != null && mGameApk.exists()) {
                 mGameApk.delete();
             }
-            startActivity(new Intent(this, SplashActivity.class));
+            startActivity(new Intent(this, WebLauncherActivity.class));
             finish();
         }
     }
