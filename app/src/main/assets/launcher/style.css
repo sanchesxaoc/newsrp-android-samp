@@ -3331,3 +3331,111 @@ select option {
   .reinstall-btn { padding: 6px 10px; font-size: 9px; }
   .btn-save { padding: 6px 16px; font-size: 10px; margin-top: 6px; }
 }
+
+/* ══════════════════════════════════════════
+   Confirm Dialog — Unsaved Changes (redesign)
+══════════════════════════════════════════ */
+#confirm-dialog.dialog-overlay {
+  background: rgba(4, 4, 10, 0.45);
+  backdrop-filter: blur(18px) saturate(1.4);
+  -webkit-backdrop-filter: blur(18px) saturate(1.4);
+}
+
+.confirm-card {
+  background: rgba(22, 24, 34, 0.82);
+  border: 1px solid rgba(255,255,255,0.09);
+  border-top: 1px solid rgba(255,255,255,0.16);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-radius: 20px;
+  padding: 36px 32px 28px;
+  width: 340px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  box-shadow: 0 32px 80px rgba(0,0,0,0.55), 0 0 0 1px rgba(143,180,48,0.08);
+  transform: scale(1);
+  transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+}
+#confirm-dialog.dialog-overlay.hidden .confirm-card {
+  transform: scale(0.88);
+}
+
+.confirm-icon-wrap {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background: rgba(143,180,48,0.1);
+  border: 1px solid rgba(143,180,48,0.22);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #8fb430;
+  margin-bottom: 18px;
+}
+.confirm-icon-wrap svg {
+  width: 22px;
+  height: 22px;
+}
+
+.confirm-title {
+  font-size: 16px;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: -0.3px;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.confirm-msg {
+  font-size: 12px;
+  line-height: 1.65;
+  color: rgba(255,255,255,0.5);
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.confirm-actions {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+}
+
+.confirm-btn-discard {
+  flex: 1;
+  padding: 11px 0;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.09);
+  color: rgba(255,255,255,0.6);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.confirm-btn-discard:hover {
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+}
+
+.confirm-btn-save {
+  flex: 2;
+  padding: 11px 0;
+  border-radius: 10px;
+  background: #8fb430;
+  border: none;
+  color: #0a0a0f;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 18px rgba(143,180,48,0.3);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.confirm-btn-save:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px rgba(143,180,48,0.4);
+}
+.confirm-btn-save:active {
+  transform: scale(0.97);
+}
