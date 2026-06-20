@@ -3100,3 +3100,227 @@ select option {
 .changelog-entry:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
 .changelog-items { margin-left: 20px; margin-bottom: 16px; color: var(--text-sec); font-size: 14px; line-height: 1.6; }
 .changelog-items li { margin-bottom: 6px; }
+
+/* ===== MOBILE RESPONSIVE (Android WebView) ===== */
+@media (max-width: 600px) {
+  :root {
+    --sidebar-w: 52px;
+    --topbar-h: 44px;
+    --bottom-h: 36px;
+  }
+
+  /* Sidebar menor */
+  .sidebar-logo {
+    width: 34px;
+    height: 34px;
+  }
+
+  .sidebar-top {
+    top: 10px;
+  }
+
+  .nav-group {
+    width: 40px;
+    gap: 4px;
+    padding: 4px 0;
+  }
+
+  .nav-btn {
+    width: 36px;
+    height: 36px;
+  }
+
+  /* Topbar: remover padding-top excessivo */
+  .topbar {
+    padding: 10px 12px 0;
+    height: auto;
+    min-height: var(--topbar-h);
+    gap: 6px;
+  }
+
+  .topbar-left,
+  .topbar-center,
+  .topbar-right {
+    gap: 4px;
+  }
+
+  /* Cards do topbar menores */
+  .player-count-card {
+    padding: 4px 8px;
+    border-radius: 14px;
+  }
+
+  .pc-label {
+    font-size: 8px;
+  }
+
+  #player-count-num {
+    font-size: 10px;
+  }
+
+  .version-card {
+    padding: 4px 8px 4px 6px;
+    gap: 6px;
+    border-radius: 16px;
+  }
+
+  .v-icon {
+    width: 22px;
+    height: 22px;
+  }
+
+  .v-label {
+    font-size: 9px;
+  }
+
+  .v-value {
+    font-size: 9px;
+  }
+
+  .user-profile {
+    padding: 4px 8px;
+    gap: 8px;
+    border-radius: 20px;
+  }
+
+  .user-name {
+    font-size: 11px;
+  }
+
+  .user-discord-tag {
+    font-size: 9px;
+  }
+
+  .user-avatar {
+    width: 28px;
+    height: 28px;
+  }
+
+  /* ===== HOME PAGE ===== */
+  #page-home {
+    align-items: flex-start;
+    padding-top: 24px;
+    padding-bottom: calc(var(--bottom-h) + 8px);
+  }
+
+  .hero-content {
+    padding: 0 18px;
+    max-width: 100%;
+  }
+
+  .hero-title {
+    font-size: 36px;
+    letter-spacing: -1px;
+    margin-bottom: 12px;
+  }
+
+  .hero-description {
+    font-size: 12px;
+    line-height: 1.5;
+    margin-bottom: 20px;
+    max-width: 100%;
+  }
+
+  .hero-meta {
+    gap: 8px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+
+  .meta-item {
+    font-size: 11px;
+    padding: 4px 10px;
+  }
+
+  .hero-actions {
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .btn-play-bubble {
+    padding: 11px 28px;
+    font-size: 12px;
+  }
+
+  .btn-configure {
+    padding: 9px 16px;
+    font-size: 12px;
+  }
+
+  /* ===== BOTTOM BAR ===== */
+  .bottombar {
+    padding: 0 16px;
+    bottom: 8px;
+  }
+
+  .server-address {
+    font-size: 10px;
+    padding: 4px 10px;
+  }
+
+  /* ===== SETTINGS PAGE ===== */
+  .settings-content {
+    padding: 0 16px;
+  }
+
+  .settings-header h2 {
+    font-size: 22px;
+  }
+
+  .settings-grid.single-col {
+    gap: 14px;
+  }
+
+  .settings-row {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  /* ===== SERVERS PAGE ===== */
+  .servers-content {
+    padding: 20px 16px 60px;
+  }
+
+  .servers-header {
+    margin-bottom: 20px;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .servers-title {
+    font-size: 20px;
+  }
+
+  .server-card-header {
+    height: 120px;
+  }
+
+  .server-card-body {
+    padding: 16px;
+    gap: 12px;
+  }
+
+  /* ===== CHANGELOG PAGE ===== */
+  #page-changelogs .content {
+    padding: 20px 16px 60px;
+  }
+
+  .section-title {
+    font-size: 20px;
+  }
+
+  /* ===== DIALOGS ===== */
+  .dialog-box {
+    margin: 16px;
+    padding: 20px 16px;
+    max-width: calc(100vw - 32px);
+  }
+
+  .dialog-title {
+    font-size: 16px;
+  }
+
+  .dialog-message {
+    font-size: 13px;
+  }
+}
