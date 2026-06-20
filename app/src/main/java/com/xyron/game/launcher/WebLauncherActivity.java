@@ -7,6 +7,8 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.webkit.WebSettings;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
@@ -33,8 +35,10 @@ public class WebLauncherActivity extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN
         );
         applyImmersive();
+        getWindow().setBackgroundDrawable(new ColorDrawable(Color.BLACK));
 
         webView = new WebView(this);
+        webView.setBackgroundColor(0xFF0A0A0F);
         setContentView(webView);
 
         WebSettings settings = webView.getSettings();
