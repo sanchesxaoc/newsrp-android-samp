@@ -189,6 +189,10 @@ document.addEventListener('DOMContentLoaded', function () {
   loadConfig();
   loadServerBadge();
 
+  // URL param: ?page=settings|servers|changelogs (preview only)
+  var urlPage = new URLSearchParams(window.location.search).get('page');
+  if (urlPage) showPage(urlPage);
+
   // Ready
   document.body.classList.add('ready');
 });
