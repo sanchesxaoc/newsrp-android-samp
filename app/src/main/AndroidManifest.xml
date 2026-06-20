@@ -67,6 +67,14 @@
             android:exported="true"/>
 
         <activity
+            android:name=".launcher.WebLauncherActivity"
+            android:screenOrientation="landscape"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|uiMode"
+            android:windowSoftInputMode="adjustResize|stateVisible"
+            android:exported="false"/>
+
+        <activity
             android:name=".launcher.MainActivity"
             android:screenOrientation="landscape"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"

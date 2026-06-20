@@ -39,7 +39,7 @@ public class EntryActivity extends SampActivity {
             return;
         }
 
-        Intent gameIntent = new Intent(this, MainActivity.class);
+        Intent gameIntent = new Intent(this, WebLauncherActivity.class);
         if (getIntent() != null && getIntent().getExtras() != null) {
             gameIntent.putExtras(getIntent().getExtras());
         }
