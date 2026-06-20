@@ -4,6 +4,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
@@ -13,21 +14,18 @@ import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
 import android.util.Log;
-import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.Toast;
-import android.content.pm.ActivityInfo;  // ADICIONADO IMPORTAÃ‡ÃƒO CORRETA
+import android.webkit.JavascriptInterface;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.FileProvider;
 
-//import com.xyron.game.BuildConfig;
 import com.xyron.game.R;
-import com.xyron.game.launcher.util.ButtonAnimator;
 import com.xyron.game.launcher.util.DataVariantPreferences;
 
 import java.io.File;
@@ -48,6 +46,7 @@ public class UpdateActivity extends SampActivity {
     private String mSelectedDataVariantId = DATA_VARIANT_LITE;
 
     private File mGameApk;
+    private WebView mWebView;
 
     boolean mIsStartingUpdate = false;
     boolean mPendingStartUpdate = false;
@@ -80,69 +79,92 @@ public class UpdateActivity extends SampActivity {
         ETC
     }
 
-    public void changeTheme(boolean theme) {
-        if(theme)  {
-            findViewById(R.id.main_layout).setBackgroundResource(R.drawable.bg_blue);
-            ((ProgressBar)findViewById(R.id.download_progress)).setProgressDrawable(getResources().getDrawable(R.drawable.download_progress_blue));
-            ((View)findViewById(R.id.view_blue)).setVisibility(View.VISIBLE);
-        }
-        else {
-            findViewById(R.id.main_layout).setBackgroundResource(R.drawable.bg_red);
-            ((ProgressBar)findViewById(R.id.download_progress)).setProgressDrawable(getResources().getDrawable(R.drawable.download_progress));
-            ((View)findViewById(R.id.view_red)).setVisibility(View.VISIBLE);
+    // ── WebView JS helper ──────────────────────────────────────────────────
+    private void callJs(final String fn, final Object... args) {
+        runOnUiThread(() -> {
+            if (mWebView == null) return;
+            StringBuilder sb = new StringBuilder(fn).append("(");
+            for (int i = 0; i < args.length; i++) {
+                if (i > 0) sb.append(",");
+                Object a = args[i];
+                if (a instanceof String) {
+                    sb.append("'")
+                      .append(((String) a).replace("\\", "\\\\").replace("'", "\\'").replace("\n", " "))
+                      .append("'");
+                } else if (a instanceof Boolean) {
+                    sb.append((Boolean) a ? "true" : "false");
+                } else {
+                    sb.append(a);
+                }
+            }
+            sb.append(")");
+            mWebView.evaluateJavascript(sb.toString(), null);
+        });
+    }
+
+    // ── JavaScript → Java bridge ───────────────────────────────────────────
+    public class UpdateBridgeJs {
+        @JavascriptInterface
+        public void selectVariant(String variantId) {
+            selectDataVariant(variantId);
         }
     }
 
+    // ── No-op: theme is handled in HTML ───────────────────────────────────
+    public void changeTheme(boolean theme) { /* styled in update.html */ }
+
+    // ── Message handler ───────────────────────────────────────────────────
     class IncomingHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
             if (msg.what == 4) {
-                UpdateActivity.UpdateStatus valueOf = UpdateActivity.UpdateStatus.valueOf(msg.getData().getString("status", ""));
-                if (valueOf == UpdateStatus.DownloadGameData) {
-                    ((TextView)findViewById(R.id.installation_text)).setText("Atualizando a data do jogo...");
-                    Log.d("x1y2z", "statusname = " + valueOf);
-                    long j = msg.getData().getLong("total");
-                    long j2 = msg.getData().getLong("current");
-                    ((TextView) findViewById(R.id.fileName)).setText(msg.getData().getString("filename"));
-                    ((TextView) findViewById(R.id.fileCount)).setText(j2/1048576 + "MB/" + j/1048576+"MB");
-                    ProgressBar progressBar = findViewById(R.id.download_progress);
-                    progressBar.setIndeterminate(false);
-                    Log.d("UpdateActivity", (int) (j/1048576) + "/" + (int) (j2/1048576));
-                    progressBar.setMax((int) (j/1048576));
-                    progressBar.setProgress((int) (j2/1048576));
+                UpdateStatus valueOf = UpdateStatus.valueOf(msg.getData().getString("status", ""));
 
-                    ((TextView) findViewById(R.id.fileProgressPercent)).setText(j2*100/(j+1) + "%");
-                } else if (valueOf == UpdateActivity.UpdateStatus.CheckUpdate) {
-                    Log.d("x1y2z", "statusname = " + valueOf);
-                    long j = msg.getData().getLong("total");
-                    long j2 = msg.getData().getLong("current");
-                    ((TextView) findViewById(R.id.fileName)).setText(msg.getData().getString("filename"));
-                    ProgressBar progressBar = (ProgressBar) UpdateActivity.this.findViewById(R.id.download_progress);
-                    progressBar.setMax((int) (j/1048576));
-                    progressBar.setProgress((int) (j2/1048576));
+                if (valueOf == UpdateStatus.DownloadGameData) {
+                    callJs("setStatus", "Atualizando a data do jogo...");
+                    long total   = msg.getData().getLong("total");
+                    long current = msg.getData().getLong("current");
+                    String filename = msg.getData().getString("filename");
+                    callJs("setIndeterminate", false);
+                    callJs("setFileName", filename != null ? filename : "");
+                    callJs("setFileCount", current / 1048576 + "MB / " + total / 1048576 + "MB");
+                    int pct = total > 0 ? (int)(current * 100 / (total + 1)) : 0;
+                    callJs("setProgress", pct);
+                    Log.d("UpdateActivity", current / 1048576 + "/" + total / 1048576);
+
+                } else if (valueOf == UpdateStatus.CheckUpdate) {
+                    long total   = msg.getData().getLong("total");
+                    long current = msg.getData().getLong("current");
+                    String filename = msg.getData().getString("filename");
+                    callJs("setFileName", filename != null ? filename : "Verificando...");
+                    if (total > 0) {
+                        callJs("setIndeterminate", false);
+                        callJs("setProgress", (int)(current * 100 / (total + 1)));
+                    }
+
                 } else if (valueOf == UpdateStatus.DownloadGame) {
-                    ((TextView)findViewById(R.id.installation_text)).setText("Atualizando o jogo...");
-                    Log.d("x1y2z", "statusname = " + valueOf);
-                    long j = msg.getData().getLong("total");
-                    long j2 = msg.getData().getLong("current");
-                    ((TextView) findViewById(R.id.fileName)).setText(msg.getData().getString("filename"));
-                    ((TextView) findViewById(R.id.fileCount)).setText(msg.getData().getLong("currentfile") + "/" + msg.getData().getLong("totalfiles"));
-                    ProgressBar progressBar = (ProgressBar) UpdateActivity.this.findViewById(R.id.download_progress);
-                    progressBar.setIndeterminate(false);
-                    progressBar.setMax((int) (j/1048576));
-                    progressBar.setProgress((int) (j2/1048576));
+                    callJs("setStatus", "Atualizando o jogo...");
+                    long total   = msg.getData().getLong("total");
+                    long current = msg.getData().getLong("current");
+                    long curFile = msg.getData().getLong("currentfile");
+                    long totFile = msg.getData().getLong("totalfiles");
+                    String filename = msg.getData().getString("filename");
+                    callJs("setIndeterminate", false);
+                    callJs("setFileName", filename != null ? filename : "");
+                    callJs("setFileCount", curFile + " / " + totFile);
+                    int pct = total > 0 ? (int)(current * 100 / (total + 1)) : 0;
+                    callJs("setProgress", pct);
+
                 } else if (valueOf == UpdateStatus.SourceUnavailable) {
-                    ((TextView)findViewById(R.id.installation_text)).setText("Fonte de download indisponivel");
-                    ((TextView)findViewById(R.id.fileName)).setText("Nao foi possivel acessar os arquivos do jogo agora.");
-                    ((TextView)findViewById(R.id.fileCount)).setText("Revise o update_sources.json ou tente novamente depois.");
-                    ((TextView)findViewById(R.id.fileProgressPercent)).setText("");
-                    ProgressBar progressBar = (ProgressBar) UpdateActivity.this.findViewById(R.id.download_progress);
-                    progressBar.setIndeterminate(false);
-                    progressBar.setProgress(0);
-                    Toast.makeText(UpdateActivity.this, "Nao consegui acessar a fonte dos arquivos.", Toast.LENGTH_LONG).show();
+                    callJs("setStatus", "Fonte de download indisponível");
+                    callJs("setFileName", "Não foi possível acessar os arquivos do jogo.");
+                    callJs("setFileCount", "");
+                    callJs("setIndeterminate", false);
+                    callJs("setProgress", 0);
                     startActivity(new Intent(UpdateActivity.this, SplashActivity.class));
                     finish();
-                }else if (!mIsStartingUpdate) {
+
+                } else if (!mIsStartingUpdate) {
                     Message obtain2 = Message.obtain((Handler) null, 1);
                     obtain2.replyTo = UpdateActivity.this.mMessenger;
                     try {
@@ -152,20 +174,16 @@ public class UpdateActivity extends SampActivity {
                     }
                     mIsStartingUpdate = true;
                 }
-            }
-            else if(msg.what == 2)
-            {
-                Intent intent;
+
+            } else if (msg.what == 2) {
                 Log.d("x1y2z", "UpdateService.UPDATE_GAME_DATA");
-                //resetProgress(true, 100, 100);
                 if (msg.getData().getBoolean("status", false)) {
                     String string3 = msg.getData().getString("apkPath", "");
                     if (string3.length() > 0) {
                         mGameApk = new File(string3);
                     }
                     if (mGameApk == null || !mGameApk.exists()) {
-                        intent = new Intent(UpdateActivity.this, SplashActivity.class);
-                        startActivity(intent);
+                        startActivity(new Intent(UpdateActivity.this, SplashActivity.class));
                         finish();
                     } else {
                         requestInstallGame();
@@ -173,12 +191,11 @@ public class UpdateActivity extends SampActivity {
                     }
                 }
                 Log.d("x1y2z", "Error update game data");
-            }
-            else if (msg.what == 1) {
+
+            } else if (msg.what == 1) {
                 Log.i("UpdateActivity", "UpdateService.UPDATE_GAME");
-                ((TextView)findViewById(R.id.installation_text)).setText("Instalando...");
-                ProgressBar progressBar = (ProgressBar) UpdateActivity.this.findViewById(R.id.download_progress);
-                progressBar.setIndeterminate(true);
+                callJs("setStatus", "Instalando...");
+                callJs("setIndeterminate", true);
                 String string = msg.getData().getString("apkPath", "");
                 if (msg.getData().getBoolean("status", false)) {
                     if (string.length() > 0) {
@@ -198,12 +215,13 @@ public class UpdateActivity extends SampActivity {
         }
     }
 
-    void requestInstallGame()
-    {
+    void requestInstallGame() {
         Log.d("x1y2z", "request install game");
-
-        Uri contentUri1 = FileProvider.getUriForFile(getApplicationContext(), getApplicationContext().getPackageName() + ".provider", mGameApk);
-
+        Uri contentUri1 = FileProvider.getUriForFile(
+            getApplicationContext(),
+            getApplicationContext().getPackageName() + ".provider",
+            mGameApk
+        );
         Intent intent = new Intent(Intent.ACTION_VIEW, contentUri1);
         intent.setDataAndType(contentUri1, "application/vnd.android.package-archive");
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
@@ -213,7 +231,7 @@ public class UpdateActivity extends SampActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.i("UpdateActivity", "onActivityResult -> code quest: " + resultCode + ", resultCode: " + data);
+        Log.i("UpdateActivity", "onActivityResult -> requestCode: " + requestCode + ", resultCode: " + resultCode);
         if (requestCode == 0) {
             if (mGameApk != null && mGameApk.exists()) {
                 mGameApk.delete();
@@ -229,7 +247,6 @@ public class UpdateActivity extends SampActivity {
             mUpdateMode = UpdateMode.Undefined;
             return;
         }
-
         try {
             mUpdateMode = UpdateMode.valueOf(modeName);
         } catch (IllegalArgumentException ignored) {
@@ -238,36 +255,20 @@ public class UpdateActivity extends SampActivity {
     }
 
     private void setupDataVariantChooser() {
-        View variantPanel = findViewById(R.id.data_variant_panel);
-        View progressPanel = findViewById(R.id.update_progress_panel);
         if (mUpdateMode == UpdateMode.GameDataUpdate) {
-            bindDataVariantButton(R.id.data_variant_lite, DATA_VARIANT_LITE);
-            bindDataVariantButton(R.id.data_variant_full, DATA_VARIANT_FULL);
-
             String savedVariantId = DataVariantPreferences.getSelectedVariantId(this);
             if (DATA_VARIANT_FULL.equals(savedVariantId)) {
                 DataVariantPreferences.saveSelectedVariantId(this, DATA_VARIANT_LITE);
                 savedVariantId = DATA_VARIANT_LITE;
             }
-
             if (savedVariantId.isEmpty()) {
                 savedVariantId = DATA_VARIANT_LITE;
                 DataVariantPreferences.saveSelectedVariantId(this, DATA_VARIANT_LITE);
             }
-
             startDataVariantUpdate(savedVariantId, false);
-            return;
-
         } else {
-            variantPanel.setVisibility(View.GONE);
-            progressPanel.setVisibility(View.VISIBLE);
+            callJs("showProgressPanel", "Preparando atualização...");
         }
-    }
-
-    private void bindDataVariantButton(int viewId, String variantId) {
-        TextView button = findViewById(viewId);
-        button.setOnTouchListener(new ButtonAnimator(this, button));
-        button.setOnClickListener(v -> selectDataVariant(variantId));
     }
 
     private void selectDataVariant(String variantId) {
@@ -279,7 +280,6 @@ public class UpdateActivity extends SampActivity {
         if (!DataVariantPreferences.isSupportedVariantId(normalizedVariantId)) {
             normalizedVariantId = DATA_VARIANT_LITE;
         }
-
         mSelectedDataVariantId = normalizedVariantId;
         if (saveSelection) {
             DataVariantPreferences.saveSelectedVariantId(this, normalizedVariantId);
@@ -289,26 +289,19 @@ public class UpdateActivity extends SampActivity {
         mStartMessageSent = false;
         mIsStartingUpdate = false;
 
-        findViewById(R.id.data_variant_panel).setVisibility(View.GONE);
-        findViewById(R.id.update_progress_panel).setVisibility(View.VISIBLE);
-        ((TextView)findViewById(R.id.installation_text)).setText("Preparando a data " + getSelectedVariantLabel() + "...");
-        ((TextView)findViewById(R.id.fileName)).setText("Conectando ao Hugging Face");
-        ((TextView)findViewById(R.id.fileCount)).setText("");
-        ((TextView)findViewById(R.id.fileProgressPercent)).setText("");
-        ((ProgressBar)findViewById(R.id.download_progress)).setIndeterminate(true);
+        final String label = DATA_VARIANT_FULL.equals(mSelectedDataVariantId) ? "Full" : "Lite";
+        callJs("showProgressPanel", "Preparando a data " + label + "...");
+        callJs("setFileName", "Conectando ao servidor");
+        callJs("setFileCount", "");
+        callJs("setIndeterminate", true);
 
         requestGameDataUpdateStart();
-    }
-
-    private String getSelectedVariantLabel() {
-        return DATA_VARIANT_FULL.equals(mSelectedDataVariantId) ? "Full" : "Lite";
     }
 
     private void requestGameDataUpdateStart() {
         if (!mPendingStartUpdate || mStartMessageSent || mGpuType == 0) {
             return;
         }
-
         if (mService == null) {
             if (!isBindingService) {
                 isBindingService = true;
@@ -316,7 +309,6 @@ public class UpdateActivity extends SampActivity {
             }
             return;
         }
-
         sendGameDataUpdateStart();
     }
 
@@ -324,7 +316,6 @@ public class UpdateActivity extends SampActivity {
         if (!mPendingStartUpdate || mStartMessageSent || mService == null || mGpuType == 0) {
             return;
         }
-
         Message obtain = Message.obtain((Handler) null, 7);
         obtain.getData().putInt("gputype", mGpuType);
         obtain.getData().putString("data_variant", mSelectedDataVariantId);
@@ -338,7 +329,6 @@ public class UpdateActivity extends SampActivity {
         }
     }
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -347,25 +337,40 @@ public class UpdateActivity extends SampActivity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_update);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-
-        // ForÃ§ar orientaÃ§Ã£o para paisagem
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        readUpdateMode();
-        setupDataVariantChooser();
 
-        boolean theme = mPref.getBoolean("theme", false);
-        changeTheme(theme);
+        // Setup WebView
+        mWebView = findViewById(R.id.update_webview);
+        WebSettings ws = mWebView.getSettings();
+        ws.setJavaScriptEnabled(true);
+        ws.setAllowFileAccessFromFileURLs(true);
+        ws.setAllowUniversalAccessFromFileURLs(true);
+        ws.setDomStorageEnabled(true);
+        ws.setCacheMode(WebSettings.LOAD_NO_CACHE);
+        mWebView.setWebViewClient(new WebViewClient() {
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
+                readUpdateMode();
+                setupDataVariantChooser();
+            }
+        });
+        mWebView.addJavascriptInterface(new UpdateBridgeJs(), "UpdateBridge");
+        mWebView.loadUrl("file:///android_asset/launcher/update.html");
 
+        // GPU detection (invisible, needed to detect texture format)
         GLSurfaceView.Renderer mGlRenderer = new GLSurfaceView.Renderer() {
             @Override
             public void onSurfaceCreated(GL10 gl10, EGLConfig eglConfig) {
                 eGPUType egputype;
-                String glGetString = gl10.glGetString(GL10.GL_EXTENSIONS);
+                String glGetString  = gl10.glGetString(GL10.GL_EXTENSIONS);
                 String glGetString2 = gl10.glGetString(GL10.GL_EXTENSIONS);
                 if (glGetString2.contains("GL_IMG_texture_compression_pvrtc")) {
                     egputype = eGPUType.PVR;
                     mGpuType = 3;
-                } else if (glGetString2.contains("GL_EXT_texture_compression_dxt1") || glGetString2.contains("GL_EXT_texture_compression_s3tc") || glGetString2.contains("GL_AMD_compressed_ATC_texture")) {
+                } else if (glGetString2.contains("GL_EXT_texture_compression_dxt1")
+                        || glGetString2.contains("GL_EXT_texture_compression_s3tc")
+                        || glGetString2.contains("GL_AMD_compressed_ATC_texture")) {
                     egputype = eGPUType.DXT;
                     mGpuType = 1;
                 } else {
@@ -374,21 +379,14 @@ public class UpdateActivity extends SampActivity {
                 }
                 Log.e("x1y2z", "GPU name: " + glGetString);
                 Log.e("x1y2z", "GPU type: " + egputype.name());
-
                 if (mUpdateMode == UpdateMode.GameDataUpdate) {
                     requestGameDataUpdateStart();
                 }
             }
-
             @Override
-            public void onSurfaceChanged(GL10 gl10, int i, int i1) {
-
-            }
-
+            public void onSurfaceChanged(GL10 gl10, int i, int i1) {}
             @Override
-            public void onDrawFrame(GL10 gl10) {
-
-            }
+            public void onDrawFrame(GL10 gl10) {}
         };
 
         ConstraintLayout gpuLayout = findViewById(R.id.gpu);
@@ -405,7 +403,6 @@ public class UpdateActivity extends SampActivity {
             isBind = true;
             sendGameDataUpdateStart();
         }
-
         @Override
         public void onServiceDisconnected(ComponentName componentName) {
             mService = null;
