@@ -37,6 +37,37 @@
       select option{background:#15151e;color:var(--text)}
       .select-wrap{position:relative}
       .select-wrap::after{content:"";position:absolute;right:14px;top:50%;transform:translateY(-50%);width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-top:5px solid var(--text-sec);pointer-events:none}
+
+      /* ── Dashboard-style settings ── */
+      .ds-settings{display:flex;flex-direction:column;gap:14px;width:100%;padding:0 20px;animation:slideUp .35s ease-out}
+      .ds-header{margin-bottom:4px}
+      .ds-eyebrow{font-size:9px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--accent)}
+      .ds-title{font-size:22px;font-weight:900;letter-spacing:-.5px;color:#fff;margin-top:3px}
+      .ds-group{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:12px;overflow:hidden}
+      .ds-group-label{font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text-muted);padding:12px 16px 10px;border-bottom:1px solid rgba(255,255,255,.05)}
+      .ds-row{display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid rgba(255,255,255,.04)}
+      .ds-row:last-child{border-bottom:none}
+      .ds-row-icon{width:30px;height:30px;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:var(--accent-dark);border:1px solid rgba(143,180,48,.22);border-radius:8px;color:var(--accent)}
+      .ds-row-icon svg{width:14px;height:14px}
+      .ds-row-info{flex:1;min-width:0}
+      .ds-row-name{font-size:12px;font-weight:600;color:var(--text)}
+      .ds-row-desc{font-size:10px;color:var(--text-muted);margin-top:1px}
+      .ds-row-ctrl{flex-shrink:0}
+      .ds-input{width:160px;height:34px;padding:0 12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:8px;color:var(--text);font-family:Inter,sans-serif;font-size:12px;font-weight:500;outline:none;transition:.2s;-webkit-user-select:text;user-select:text}
+      .ds-input:focus{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-glow)}
+      .ds-select{height:34px;padding:0 28px 0 12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:8px;color:var(--text);font-family:Inter,sans-serif;font-size:12px;font-weight:500;outline:none;cursor:pointer;appearance:none;transition:.2s;width:120px}
+      .ds-select:focus{border-color:var(--accent)}
+      .ds-select option{background:#15151e;color:var(--text)}
+      .ds-select-wrap{position:relative;flex-shrink:0}
+      .ds-select-wrap::after{content:"";position:absolute;right:10px;top:50%;transform:translateY(-50%);width:0;height:0;border-left:4px solid transparent;border-right:4px solid transparent;border-top:4px solid var(--text-sec);pointer-events:none}
+      .ds-info{height:34px;padding:0 12px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:8px;display:flex;align-items:center;font-size:11px;font-weight:600;color:var(--text-muted);font-family:'JetBrains Mono',monospace;white-space:nowrap}
+      .ds-btn-danger{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;background:rgba(229,57,53,.07);border:1px solid rgba(229,57,53,.2);border-radius:8px;color:#e05555;font-family:inherit;font-size:11px;font-weight:700;cursor:pointer;transition:.2s;-webkit-tap-highlight-color:transparent}
+      .ds-btn-danger:hover{background:rgba(229,57,53,.14)}
+      .ds-btn-danger svg{width:13px;height:13px}
+      .ds-save{display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;background:var(--accent);color:#0d0d14;border:none;border-radius:10px;font-family:inherit;font-size:12px;font-weight:800;letter-spacing:.8px;cursor:pointer;transition:.15s;-webkit-tap-highlight-color:transparent}
+      .ds-save:hover{filter:brightness(1.08)}
+      .ds-save:active{transform:scale(.98)}
+      .ds-save svg{width:14px;height:14px}
     </style>
   </head>
   <body>
@@ -157,76 +188,123 @@
 
       <!-- ===== SETTINGS PAGE ===== -->
       <section class="page" id="page-settings">
-        <div class="settings-content">
-          <div class="settings-header">
-            <h2>CONFIGURAÇÕES</h2>
+        <div class="ds-settings">
+
+          <div class="ds-header">
+            <div class="ds-eyebrow">Launcher</div>
+            <h2 class="ds-title">CONFIGURAÇÕES</h2>
           </div>
 
-          <div class="settings-grid single-col">
+          <!-- Perfil -->
+          <div class="ds-group">
+            <div class="ds-group-label">Perfil</div>
+            <div class="ds-row">
+              <div class="ds-row-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              </div>
+              <div class="ds-row-info">
+                <div class="ds-row-name">Nome do Jogador</div>
+                <div class="ds-row-desc">Apelido exibido no servidor</div>
+              </div>
+              <div class="ds-row-ctrl">
+                <input type="text" id="nickname-input" class="ds-input" placeholder="Seu nick..." maxlength="24"/>
+              </div>
+            </div>
+          </div>
 
-            <!-- Nome do Jogador (substitui GTA Path) -->
-            <div class="setting-group full-width">
-              <label class="setting-label">Nome do Jogador</label>
-              <div class="path-row">
-                <input type="text" id="nickname-input" placeholder="Seu nome no jogo..." maxlength="24" />
+          <!-- Jogo -->
+          <div class="ds-group">
+            <div class="ds-group-label">Jogo</div>
+
+            <div class="ds-row">
+              <div class="ds-row-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+              </div>
+              <div class="ds-row-info">
+                <div class="ds-row-name">Linhas do Chat</div>
+                <div class="ds-row-desc">Quantidade de mensagens visíveis</div>
+              </div>
+              <div class="ds-row-ctrl ds-select-wrap">
+                <select id="chat-lines-select" class="ds-select">
+                  <option value="5">5 linhas</option>
+                  <option value="10">10 linhas</option>
+                  <option value="15">15 linhas</option>
+                  <option value="20">20 linhas</option>
+                </select>
               </div>
             </div>
 
-            <!-- Seção de Jogo -->
-            <div class="settings-sub-header" style="margin-top:24px;margin-bottom:16px">
-              <h3>Jogo</h3>
-            </div>
-
-            <div class="settings-row" style="margin-bottom:16px">
-              <div class="setting-group">
-                <label class="setting-label">Linhas do Chat</label>
-                <div class="select-wrap">
-                  <select id="chat-lines-select">
-                    <option value="5">5 linhas</option>
-                    <option value="10">10 linhas</option>
-                    <option value="15">15 linhas</option>
-                    <option value="20">20 linhas</option>
-                  </select>
-                </div>
+            <div class="ds-row">
+              <div class="ds-row-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
               </div>
-              <div class="setting-group">
-                <label class="setting-label">Versão do Launcher</label>
-                <div class="info-wrapper">
-                  <span id="launcher-version">Carregando...</span>
-                </div>
+              <div class="ds-row-info">
+                <div class="ds-row-name">Teclado Android</div>
+                <div class="ds-row-desc">Usar teclado nativo do sistema</div>
               </div>
-            </div>
-
-            <div class="settings-row" style="margin-bottom:16px">
-              <div class="setting-group toggle-group">
-                <label class="setting-label">Teclado Android</label>
+              <div class="ds-row-ctrl">
                 <label class="toggle-switch">
-                  <input type="checkbox" id="keyboard-toggle" />
+                  <input type="checkbox" id="keyboard-toggle"/>
                   <span class="toggle-slider"></span>
                 </label>
               </div>
-              <div class="setting-group toggle-group">
-                <label class="setting-label">Voice Chat</label>
+            </div>
+
+            <div class="ds-row">
+              <div class="ds-row-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+              </div>
+              <div class="ds-row-info">
+                <div class="ds-row-name">Voice Chat</div>
+                <div class="ds-row-desc">Comunicação por voz no jogo</div>
+              </div>
+              <div class="ds-row-ctrl">
                 <label class="toggle-switch">
-                  <input type="checkbox" id="voicechat-toggle" />
+                  <input type="checkbox" id="voicechat-toggle"/>
                   <span class="toggle-slider"></span>
                 </label>
               </div>
             </div>
 
-            <div class="settings-row" style="gap:16px">
-              <button class="btn-dialog-cancel" id="btn-reinstall" style="flex:1;display:flex;align-items:center;justify-content:center;gap:8px">
-                <span class="material-symbols-rounded" style="font-size:16px">download</span>
-                Reinstalar Dados
-              </button>
+            <div class="ds-row">
+              <div class="ds-row-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              </div>
+              <div class="ds-row-info">
+                <div class="ds-row-name">Versão do Launcher</div>
+                <div class="ds-row-desc">Build instalada no dispositivo</div>
+              </div>
+              <div class="ds-row-ctrl">
+                <div class="ds-info" id="launcher-version">—</div>
+              </div>
             </div>
-
           </div>
 
-          <button class="btn-save" id="save-settings">
-            <span class="material-symbols-rounded" style="font-size:18px;margin-right:4px">save</span>
-            SALVAR
+          <!-- Dados -->
+          <div class="ds-group">
+            <div class="ds-group-label">Dados do Jogo</div>
+            <div class="ds-row">
+              <div class="ds-row-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.56"/></svg>
+              </div>
+              <div class="ds-row-info">
+                <div class="ds-row-name">Reinstalar Dados</div>
+                <div class="ds-row-desc">Baixa novamente os arquivos do jogo</div>
+              </div>
+              <div class="ds-row-ctrl">
+                <button class="ds-btn-danger" id="btn-reinstall">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.56"/></svg>
+                  Reinstalar
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <button class="ds-save" id="save-settings">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+            SALVAR CONFIGURAÇÕES
           </button>
+
         </div>
       </section>
 
@@ -302,17 +380,17 @@
 
     <!-- Confirmation Dialog (Unsaved Changes) -->
     <div class="dialog-overlay hidden" id="confirm-dialog">
-      <div class="dialog-box">
-        <div class="dialog-header">
-          <div class="dialog-icon">
-            <span class="material-symbols-rounded" style="font-size:24px">save_as</span>
-          </div>
-          <h3 class="dialog-title">Alterações não salvas</h3>
+      <div class="confirm-card">
+        <div class="confirm-icon-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/>
+          </svg>
         </div>
-        <p class="dialog-message">Você tem alterações pendentes. O que deseja fazer?</p>
-        <div class="dialog-footer two-btns">
-          <button class="btn-dialog-cancel" id="btn-confirm-discard">REVERTER</button>
-          <button class="btn-dialog-ok" id="btn-confirm-save">SALVAR</button>
+        <h3 class="confirm-title">Alterações não salvas</h3>
+        <p class="confirm-msg">Você editou as configurações mas ainda não salvou.<br>O que deseja fazer antes de sair?</p>
+        <div class="confirm-actions">
+          <button class="confirm-btn-discard" id="btn-confirm-discard">Descartar</button>
+          <button class="confirm-btn-save" id="btn-confirm-save">Salvar e continuar</button>
         </div>
       </div>
     </div>
