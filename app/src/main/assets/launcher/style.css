@@ -3283,4 +3283,31 @@ select option {
   .bottombar { padding: 0 clamp(10px, 3vw, 32px); bottom: 4px; }
   .sidebar-logo { width: 26px; height: 26px; }
   .nav-btn { width: 30px; height: 30px; }
+
+  /* ── Settings page: scroll vertical, conteúdo visível ── */
+  #page-settings {
+    justify-content: flex-start;
+    align-items: flex-start;
+    overflow-y: auto;
+    padding-top: calc(var(--topbar-h) + 8px);
+    padding-bottom: calc(var(--bottom-h) + 8px);
+    padding-left: calc(var(--sidebar-w) + 12px);
+    padding-right: 12px;
+  }
+  .settings-content { padding: 0; max-width: 100%; width: 100%; }
+  .settings-header { margin-bottom: 6px; }
+  .settings-header h2, .settings-page-title { font-size: 14px; letter-spacing: 1px; }
+  .settings-grid.single-col { gap: 8px; }
+  .settings-col { gap: 8px; }
+  .settings-row { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .input-icon-wrapper { height: 36px; }
+  .input-icon { width: 16px; height: 16px; left: 10px; }
+  #username-input, #gta-path-input, .select-wrapper select {
+    font-size: 11px;
+    padding: 0 10px 0 32px;
+  }
+  .toggle-card { padding: 8px 10px; }
+  .toggle-label { font-size: 10px; letter-spacing: 0.5px; }
+  .reinstall-btn { padding: 8px 12px; font-size: 10px; }
+  .btn-save { padding: 8px 20px; font-size: 11px; margin-top: 8px; }
 }
