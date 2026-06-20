@@ -9,7 +9,7 @@
 }
 
 :root {
-  --sidebar-w: 68px; /* Slightly smaller than 72px */
+  --sidebar-w: clamp(48px, 6vw, 68px);
   --topbar-h: 50px;
   --bottom-h: 40px;
   --bg: #0d0d14;
@@ -265,11 +265,13 @@ textarea {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 52px 48px 0;
+  padding: 0 clamp(12px, 4vw, 48px);
+  min-height: 44px;
   background: transparent;
   border-bottom: none;
   flex-shrink: 0;
   z-index: 5;
+  position: relative;
 }
 
 .topbar-left,
@@ -527,14 +529,14 @@ textarea {
 /* ===== HOME PAGE ===== */
 #page-home {
   align-items: center;
-  padding: 0 0 calc(var(--bottom-h) + 10px) 0;
+  padding: calc(var(--topbar-h) + 4px) 0 calc(var(--bottom-h) + 10px) 0;
 }
 
 .hero-content {
   position: relative;
   z-index: 2;
   max-width: 600px;
-  padding: 0 48px; /* Restored alignment with topbar */
+  padding: 0 clamp(14px, 4.5vw, 48px);
   animation: slideUp 0.6s ease-out;
 }
 
@@ -550,10 +552,10 @@ textarea {
 }
 
 .hero-title {
-  font-size: 64px;
+  font-size: clamp(26px, 7vw, 64px);
   font-weight: 900;
   line-height: 1;
-  margin-bottom: 24px;
+  margin-bottom: clamp(10px, 2.5vw, 24px);
   letter-spacing: -2px;
   text-transform: uppercase;
   /* Gradient text */
@@ -564,17 +566,18 @@ textarea {
 }
 
 .hero-description {
-  font-size: 15px;
-  line-height: 1.6;
-  color: rgba(255, 255, 255, 0.8); /* Brighter description */
-  margin-bottom: 40px;
+  font-size: clamp(11px, 2vw, 15px);
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: clamp(14px, 3vw, 40px);
   max-width: 480px;
 }
 
 .hero-meta {
   display: flex;
-  gap: 24px;
-  margin-bottom: 40px;
+  gap: clamp(8px, 2vw, 24px);
+  margin-bottom: clamp(14px, 3vw, 40px);
+  flex-wrap: wrap;
 }
 
 .meta-item {
@@ -598,7 +601,8 @@ textarea {
 /* Action Buttons */
 .hero-actions {
   display: flex;
-  gap: 10px;
+  gap: clamp(6px, 1.5vw, 10px);
+  flex-wrap: wrap;
 }
 
 /* ===== ANIMATED BUBBLE PLAY BUTTON ===== */
@@ -1472,7 +1476,7 @@ select option {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 48px;
+  padding: 0 clamp(12px, 4vw, 48px);
   background: transparent;
   border-top: none;
   z-index: 5;
@@ -3323,4 +3327,180 @@ select option {
   .dialog-message {
     font-size: 13px;
   }
+}
+
+/* ===== MOBILE RESPONSIVE — Portrait ≤ 520px ===== */
+@media (max-width: 520px) {
+  :root {
+    --sidebar-w: 48px;
+    --topbar-h: 40px;
+    --bottom-h: 32px;
+  }
+
+  /* ── Sidebar ── */
+  .sidebar-logo { width: 28px; height: 28px; }
+  .sidebar-top  { top: 8px; }
+  .sidebar-nav  { gap: 8px; }
+  .nav-group    { width: 36px; padding: 3px 0; gap: 2px; border-radius: 14px; }
+  .nav-btn      { width: 32px; height: 32px; }
+  .nav-btn .material-symbols-rounded { font-size: 16px !important; }
+
+  /* ── Topbar: esconde card central, compacta left/right ── */
+  .topbar {
+    padding: 0 8px;
+    gap: 4px;
+    min-height: var(--topbar-h);
+  }
+  .topbar-center { display: none; }
+  .topbar-left, .topbar-right { flex: 0 0 auto; }
+
+  .player-count-card {
+    padding: 3px 7px;
+    border-radius: 10px;
+    gap: 1px;
+  }
+  .pc-label       { font-size: 7px; }
+  #player-count-num { font-size: 9px; }
+
+  .user-profile   { padding: 3px 7px; gap: 6px; border-radius: 16px; }
+  .user-name      { font-size: 10px; }
+  .user-discord-tag { display: none; }
+  .user-avatar    { width: 24px; height: 24px; }
+  .user-avatar .material-symbols-rounded { font-size: 14px !important; }
+
+  /* ── Home page ── */
+  #page-home {
+    align-items: flex-start;
+    padding-top: calc(var(--topbar-h) + 6px);
+    padding-bottom: calc(var(--bottom-h) + 6px);
+  }
+
+  .hero-content {
+    padding: 0 14px;
+    max-width: 100%;
+  }
+
+  .hero-title {
+    font-size: clamp(22px, 8vw, 36px);
+    margin-bottom: 8px;
+    letter-spacing: -1px;
+  }
+
+  .hero-description {
+    font-size: 11px;
+    line-height: 1.45;
+    margin-bottom: 12px;
+    max-width: 100%;
+  }
+
+  .hero-meta {
+    gap: 6px;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+  }
+
+  .meta-item {
+    font-size: 8px;
+    padding: 2px 6px;
+    gap: 3px;
+  }
+
+  .meta-item .material-symbols-rounded { font-size: 10px !important; }
+
+  .hero-actions { gap: 6px; flex-wrap: wrap; }
+
+  .btn-play-bubble {
+    padding: 10px 22px;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+  }
+
+  .btn-configure {
+    padding: 8px 14px;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+  }
+
+  /* ── Bottom bar ── */
+  .bottombar { padding: 0 12px; bottom: 6px; }
+  .server-address { font-size: 9px; padding: 3px 8px; }
+  .bottombar-right { display: none; }
+
+  /* ── Settings ── */
+  #page-settings { justify-content: flex-start; padding-top: calc(var(--topbar-h) + 8px); }
+  .settings-content { padding: 0 14px; }
+  .settings-header h2 { font-size: 18px; }
+  .settings-grid.single-col { gap: 12px; }
+  .settings-row { grid-template-columns: 1fr; gap: 12px; }
+  .btn-save { padding: 12px 24px; font-size: 12px; width: 100%; justify-content: center; }
+
+  /* ── Servers ── */
+  .servers-content { padding: 14px 12px 60px; }
+  .servers-header  { margin-bottom: 14px; gap: 8px; flex-wrap: wrap; }
+  .servers-title   { font-size: 18px; }
+  .server-card-header { height: 100px; }
+  .server-card-body   { padding: 12px; gap: 10px; }
+
+  /* ── Changelog ── */
+  #page-changelogs .content { padding: 14px 12px 60px; }
+  .section-title { font-size: 18px; }
+  .changelog-container { padding: 16px; }
+
+  /* ── Dialogs ── */
+  .dialog-box {
+    margin: 12px;
+    padding: 18px 14px;
+    max-width: calc(100vw - 24px);
+    border-radius: 16px;
+  }
+  .dialog-title   { font-size: 15px; }
+  .dialog-message { font-size: 12px; }
+}
+
+/* ===== LANDSCAPE MOBILE ≤ 900px height ===== */
+
+  /* ── Centralização vertical do hero (mantém texto à esquerda) ── */
+  #page-home {
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: calc(var(--topbar-h) + 4px);
+    padding-bottom: calc(var(--bottom-h) + 4px);
+  }
+
+  .hero-content {
+    padding: 0 14px;
+    max-width: 100%;
+  }
+
+@media (max-height: 500px) and (max-width: 900px) {
+  :root {
+    --sidebar-w: 44px;
+    --topbar-h: 36px;
+    --bottom-h: 28px;
+  }
+
+  .topbar { padding: 0 clamp(10px, 3vw, 32px); }
+  .topbar-center { display: none; }
+  .user-discord-tag { display: none; }
+  .user-avatar { width: 24px; height: 24px; }
+
+  #page-home {
+    padding-top: calc(var(--topbar-h) + 4px);
+    padding-bottom: calc(var(--bottom-h) + 4px);
+    align-items: flex-start;
+  }
+
+  .hero-content { padding: 0 clamp(10px, 3vw, 32px); }
+  .hero-title   { font-size: clamp(20px, 5vw, 40px); margin-bottom: 6px; }
+  .hero-description { font-size: 11px; margin-bottom: 10px; }
+  .hero-meta    { margin-bottom: 10px; gap: 6px; }
+  .meta-item    { font-size: 8px; padding: 2px 6px; gap: 3px; }
+  .hero-actions { gap: 6px; }
+  .btn-play-bubble { padding: 9px 20px; font-size: 11px; }
+  .btn-configure   { padding: 7px 12px; font-size: 11px; }
+
+  .bottombar { padding: 0 clamp(10px, 3vw, 32px); bottom: 4px; }
+  .sidebar-logo { width: 26px; height: 26px; }
+  .nav-btn { width: 30px; height: 30px; }
 }
