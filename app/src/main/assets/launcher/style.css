@@ -3302,9 +3302,7 @@ select option {
   .btn-configure   { padding: 5px 10px; font-size: 9px; }
 
   /* ── Bottombar ── */
-  .bottombar { padding: 0 8px; bottom: 3px; }
-  .server-address { font-size: 5px; padding: 1px 4px; }
-  .bottombar-right { display: none; }
+  .bottombar { display: none; }
 
   /* ── Settings ── */
   #page-settings {
