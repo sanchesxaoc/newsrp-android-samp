@@ -75,15 +75,20 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
   // ===== Unsaved changes guard =====
+  function readCurrentSettings() {
+    return {
+      nickname:  (document.getElementById('nickname-input')      || {}).value   || '',
+      chatLines: (document.getElementById('chat-lines-select')   || {}).value   || '5',
+      keyboard:  !!((document.getElementById('keyboard-toggle')  || {}).checked),
+      voiceChat: !!((document.getElementById('voicechat-toggle') || {}).checked)
+    };
+  }
   function hasUnsavedChanges() {
-    var nick = (document.getElementById('nickname-input') || {}).value || '';
-    var chat = (document.getElementById('chat-lines-select') || {}).value || '5';
-    var kbd  = ((document.getElementById('keyboard-toggle') || {}).checked) || false;
-    var vc   = ((document.getElementById('voicechat-toggle') || {}).checked !== false);
-    return nick !== lastSavedSettings.nickname
-        || chat !== lastSavedSettings.chatLines
-        || kbd  !== lastSavedSettings.keyboard
-        || vc   !== lastSavedSettings.voiceChat;
+    var cur = readCurrentSettings();
+    return cur.nickname  !== lastSavedSettings.nickname
+        || cur.chatLines !== lastSavedSettings.chatLines
+        || cur.keyboard  !== lastSavedSettings.keyboard
+        || cur.voiceChat !== lastSavedSettings.voiceChat;
   }
 
   var pendingPage = null;
@@ -187,6 +192,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // ===== Initial Load =====
   loadConfig();
+  // Sync baseline from actual DOM so hasUnsavedChanges() never fires on first nav
+  lastSavedSettings = readCurrentSettings();
   loadServerBadge();
 
   // URL param: ?page=settings|servers|changelogs (preview only)
