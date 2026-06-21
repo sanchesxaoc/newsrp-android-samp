@@ -3255,7 +3255,8 @@ select option {
   }
 
 /* ══ LANDSCAPE PHONE — mid (401-700px height) ══ */
-@media (max-height: 700px) and (orientation: landscape) {
+/* ══ LANDSCAPE PHONE — universal (qualquer altura) ══ */
+@media (orientation: landscape) {
   :root {
     --sidebar-w: 50px;
     --topbar-h: 32px;
@@ -3269,8 +3270,10 @@ select option {
   .user-avatar { width: 24px; height: 24px; }
   .user-avatar .material-symbols-rounded { font-size: 14px !important; }
   .user-name { font-size: 10px; }
-  .user-profile { padding: 2px 12px 2px 6px; gap: 6px; background: transparent; }
+  /* padding-right maior = afasta Nick da borda direita */
+  .user-profile { padding: 2px 14px 2px 6px; gap: 6px; background: transparent; }
 
+  /* Servidor Ativo card — menor */
   .player-count-card { padding: 2px 8px; border-radius: 8px; gap: 1px; }
   .pc-label { font-size: 7px; letter-spacing: 0.2px; }
   #player-count-num { font-size: 9px; }
@@ -3293,14 +3296,14 @@ select option {
     padding-bottom: calc(var(--bottom-h) + 4px);
   }
 
-  /* 50% de largura força a descrição a quebrar em 3 linhas */
-  .hero-content { padding: 0 clamp(10px, 2vw, 24px); max-width: 50%; }
-  .hero-title   { font-size: clamp(20px, 5vw, 42px); margin-bottom: 8px; letter-spacing: -1px; }
-  .hero-description { font-size: 11px; margin-bottom: 10px; line-height: 1.45; max-width: 100%; }
-  .hero-meta    { margin-bottom: 10px; gap: 6px; flex-wrap: wrap; }
+  /* max-width: 40% força 3 linhas na descrição */
+  .hero-content { padding: 0 clamp(10px, 2vw, 24px); max-width: 40%; }
+  .hero-title   { font-size: clamp(20px, 5vw, 42px); margin-bottom: 16px; letter-spacing: -1px; }
+  .hero-description { font-size: 11px; margin-bottom: 16px; line-height: 1.5; max-width: 100%; }
+  .hero-meta    { margin-bottom: 14px; gap: 6px; flex-wrap: wrap; }
   .meta-item    { font-size: 9px; padding: 3px 8px; gap: 3px; }
   .meta-item .material-symbols-rounded { font-size: 11px !important; }
-  .hero-actions { gap: 8px; flex-wrap: wrap; }
+  .hero-actions { gap: 10px; flex-wrap: wrap; }
   .btn-play-bubble { padding: 8px 18px; font-size: 10px; }
   .btn-configure   { padding: 6px 12px; font-size: 10px; }
 
