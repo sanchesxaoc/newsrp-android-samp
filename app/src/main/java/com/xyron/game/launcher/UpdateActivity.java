@@ -14,6 +14,7 @@ import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
 import android.util.Log;
+import android.widget.Toast;
 import android.view.Window;
 import android.view.WindowManager;
 import android.webkit.JavascriptInterface;
@@ -22,7 +23,6 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.FileProvider;
 
@@ -230,20 +230,21 @@ public class UpdateActivity extends SampActivity {
     }
 
 
+    private long mBackPressedTime = 0;
+
     @Override
     public void onBackPressed() {
-        new AlertDialog.Builder(this)
-            .setTitle("Cancelar atualização?")
-            .setMessage("O download está em andamento. Deseja realmente sair e cancelar a atualização?")
-            .setPositiveButton("Sair", (dialog, which) -> {
-                if (isBind) {
-                    unbindService(serviceConnection);
-                    isBind = false;
-                }
-                finish();
-            })
-            .setNegativeButton("Continuar baixando", null)
-            .show();
+        long now = System.currentTimeMillis();
+        if (now - mBackPressedTime < 2000) {
+            if (isBind) {
+                unbindService(serviceConnection);
+                isBind = false;
+            }
+            finish();
+        } else {
+            mBackPressedTime = now;
+            Toast.makeText(this, "Pressione novamente para cancelar o download", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
