@@ -3254,34 +3254,35 @@ select option {
     max-width: 100%;
   }
 
-@media (max-height: 500px) and (orientation: landscape) {
+/* ══ LANDSCAPE PHONE — mid (401-700px height) ══ */
+@media (max-height: 700px) and (orientation: landscape) {
   :root {
-    --sidebar-w: 38px;
-    --topbar-h: 22px;
-    --bottom-h: 18px;
+    --sidebar-w: 50px;
+    --topbar-h: 32px;
+    --bottom-h: 24px;
   }
 
   /* ── Topbar ── */
-  .topbar { padding: 0 6px; }
+  .topbar { padding: 0 10px; }
   .topbar-center { display: none; }
-  .user-discord-tag { display: none; }
-  .user-avatar { width: 16px; height: 16px; }
-  .user-avatar .material-symbols-rounded { font-size: 10px !important; }
-  .user-name { font-size: 7px; }
-  .user-profile { padding: 1px 4px; gap: 3px; background: transparent; }
+  .user-discord-tag { font-size: 8px; display: block; }
+  .user-avatar { width: 24px; height: 24px; }
+  .user-avatar .material-symbols-rounded { font-size: 14px !important; }
+  .user-name { font-size: 10px; }
+  .user-profile { padding: 2px 12px 2px 6px; gap: 6px; background: transparent; }
 
-  .player-count-card { padding: 1px 4px; border-radius: 5px; gap: 0; }
-  .pc-label { font-size: 5px; }
-  #player-count-num { font-size: 6px; }
-  .pc-value-row .material-symbols-rounded { font-size: 7px !important; }
+  .player-count-card { padding: 2px 8px; border-radius: 8px; gap: 1px; }
+  .pc-label { font-size: 7px; letter-spacing: 0.2px; }
+  #player-count-num { font-size: 9px; }
+  .pc-value-row .material-symbols-rounded { font-size: 9px !important; }
 
   /* ── Sidebar ── */
-  .sidebar-logo { width: 18px; height: 18px; }
-  .sidebar-top { top: 5px; }
-  .sidebar-nav { gap: 2px; }
-  .nav-group { width: 28px; padding: 2px 0; gap: 1px; border-radius: 8px; }
-  .nav-btn { width: 24px; height: 24px; }
-  .nav-btn .material-symbols-rounded { font-size: 12px !important; }
+  .sidebar-logo { width: 30px; height: 30px; }
+  .sidebar-top { top: 8px; }
+  .sidebar-nav { gap: 6px; }
+  .nav-group { width: 40px; padding: 4px 0; gap: 4px; border-radius: 14px; }
+  .nav-btn { width: 34px; height: 34px; }
+  .nav-btn .material-symbols-rounded { font-size: 17px !important; }
 
   /* ── Home ── */
   #page-home {
@@ -3292,15 +3293,16 @@ select option {
     padding-bottom: calc(var(--bottom-h) + 4px);
   }
 
-  .hero-content { padding: 0 clamp(8px, 2vw, 20px); max-width: 60%; }
-  .hero-title   { font-size: clamp(16px, 4vw, 32px); margin-bottom: 4px; letter-spacing: -0.5px; }
-  .hero-description { font-size: 9px; margin-bottom: 6px; line-height: 1.35; }
-  .hero-meta    { margin-bottom: 8px; gap: 4px; flex-wrap: wrap; }
-  .meta-item    { font-size: 6px; padding: 1px 4px; gap: 2px; }
-  .meta-item .material-symbols-rounded { font-size: 8px !important; }
-  .hero-actions { gap: 5px; flex-wrap: wrap; }
-  .btn-play-bubble { padding: 7px 16px; font-size: 9px; }
-  .btn-configure   { padding: 5px 10px; font-size: 9px; }
+  /* 50% de largura força a descrição a quebrar em 3 linhas */
+  .hero-content { padding: 0 clamp(10px, 2vw, 24px); max-width: 50%; }
+  .hero-title   { font-size: clamp(20px, 5vw, 42px); margin-bottom: 8px; letter-spacing: -1px; }
+  .hero-description { font-size: 11px; margin-bottom: 10px; line-height: 1.45; max-width: 100%; }
+  .hero-meta    { margin-bottom: 10px; gap: 6px; flex-wrap: wrap; }
+  .meta-item    { font-size: 9px; padding: 3px 8px; gap: 3px; }
+  .meta-item .material-symbols-rounded { font-size: 11px !important; }
+  .hero-actions { gap: 8px; flex-wrap: wrap; }
+  .btn-play-bubble { padding: 8px 18px; font-size: 10px; }
+  .btn-configure   { padding: 6px 12px; font-size: 10px; }
 
   /* ── Bottombar ── */
   .bottombar { display: none; }
@@ -3331,6 +3333,36 @@ select option {
   .toggle-label { font-size: 9px; letter-spacing: 0.4px; }
   .reinstall-btn { padding: 6px 10px; font-size: 9px; }
   .btn-save { padding: 6px 16px; font-size: 10px; margin-top: 6px; }
+}
+
+/* ══ LANDSCAPE PHONE — tiny (≤ 450px height) ══ */
+@media (max-height: 450px) and (orientation: landscape) {
+  :root {
+    --sidebar-w: 42px;
+    --topbar-h: 24px;
+    --bottom-h: 18px;
+  }
+  .sidebar-logo { width: 22px; height: 22px; }
+  .sidebar-top  { top: 5px; }
+  .sidebar-nav  { gap: 2px; }
+  .nav-group    { width: 32px; padding: 2px 0; gap: 2px; border-radius: 10px; }
+  .nav-btn      { width: 28px; height: 28px; }
+  .nav-btn .material-symbols-rounded { font-size: 14px !important; }
+  .user-discord-tag { display: none; }
+  .user-avatar  { width: 18px; height: 18px; }
+  .user-avatar .material-symbols-rounded { font-size: 11px !important; }
+  .user-name    { font-size: 8px; }
+  .user-profile { padding: 1px 10px 1px 4px; gap: 3px; }
+  .player-count-card { padding: 1px 5px; border-radius: 5px; gap: 0; }
+  .pc-label     { font-size: 5px; }
+  #player-count-num { font-size: 7px; }
+  .pc-value-row .material-symbols-rounded { font-size: 7px !important; }
+  .hero-content { max-width: 55%; }
+  .hero-title   { font-size: clamp(16px, 4vw, 28px); margin-bottom: 4px; }
+  .hero-description { font-size: 9px; margin-bottom: 6px; }
+  .meta-item    { font-size: 7px; padding: 1px 5px; }
+  .btn-play-bubble { padding: 7px 14px; font-size: 9px; }
+  .btn-configure   { padding: 5px 10px; font-size: 9px; }
 }
 
 /* ══════════════════════════════════════════
