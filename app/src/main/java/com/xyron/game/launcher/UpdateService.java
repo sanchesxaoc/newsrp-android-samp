@@ -770,7 +770,11 @@ public class UpdateService extends Service {
                         Message obtain = Message.obtain(mInHandler, 4);
                         obtain.getData().putString("status", UpdateActivity.UpdateStatus.DownloadGameData.name());
                         obtain.getData().putBoolean("withProgress", true);
-                        obtain.getData().putLong("current", longRef1.element+progress.currentBytes);
+                        // alreadyDownloaded: bytes baixados em sessões anteriores (resume)
+                        // progress.totalBytes = bytes RESTANTES no servidor; fileSize - restante = já baixado
+                        long alreadyDownloaded = arrayList2.get(intRef.element) - progress.totalBytes;
+                        if (alreadyDownloaded < 0) alreadyDownloaded = 0;
+                        obtain.getData().putLong("current", longRef1.element + alreadyDownloaded + progress.currentBytes);
                         obtain.getData().putLong("total", mUpdateGameDataSize);
                         obtain.getData().putString("filename", (String)arrayList1.get(intRef.element));
                         obtain.getData().putLong("totalfiles", arrayList.size());
