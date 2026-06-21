@@ -55,6 +55,7 @@ public class UpdateService extends Service {
     public UpdateActivity.UpdateStatus mUpdateStatus = UpdateActivity.UpdateStatus.Undefined;
 
     public boolean mDownloadingStatus = false;
+    private boolean mIsRunning = false;
 
     public long mUpdateGameDataSize = 0;
     public long mUpdateGameDataSizeUpdated = 0;
@@ -141,7 +142,11 @@ public class UpdateService extends Service {
                     return;
                 }
                 updateDataVariantFromMessage(msg);
-                startUpdating();
+                if (!mIsRunning) {
+                    startUpdating();
+                }
+                // Se já está rodando, apenas atualiza o mActivityMessenger (feito acima)
+                // e o serviço continuará enviando progresso normalmente
             }
 
         }
@@ -149,6 +154,7 @@ public class UpdateService extends Service {
 
     void startUpdating()
     {
+        mIsRunning = true;
         resetUpdateState();
         loadUpdateSources();
         setUpdateStatus(UpdateActivity.UpdateStatus.CheckUpdate);
@@ -239,6 +245,7 @@ public class UpdateService extends Service {
     }
 
     private void handleSourceUnavailable() {
+        mIsRunning = false;
         mGameStatus = GameDataVerifier.hasRequiredGameData(this)
                 ? UpdateActivity.GameStatus.Updated
                 : UpdateActivity.GameStatus.Unknown;
